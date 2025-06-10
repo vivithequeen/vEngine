@@ -19,7 +19,7 @@ public:
 
     RayCastLogic(float x, float y, int fov)
     {
-        images[1] = LoadTexture("testMeow.png");
+        textures[1] = LoadTexture("testMeow.png");
         angles = new float[GetScreenWidth()];
         this->playerx = x;
         this->playery = y;
@@ -39,16 +39,27 @@ public:
         }
     }
 
-    bool drawColumn(int step, int height, int offset, float x, float y, int tileValue)
+    int drawColumn(int step, int height, int offset, float x, float y, int tileValue)
     {
 
         float axis = floor((x-(int)(x)) * 100) >1 ? x : y; // does not fully work yet
 
         int column = floor((axis - (int)(axis)) * 100);
 
-        DrawTexturePro(images[tileValue], {column * 1.0f, 0, 1, 100}, {step * 1.0f, offset * 1.0f, 1, height * 1.0f}, {0, 0}, 0, WHITE);
+        DrawTexturePro(textures[tileValue], {column * 1.0f, 0, 1, 100}, {step * 1.0f, offset * 1.0f, 1, height * 1.0f}, {0, 0}, 0, getDarkness(height));
 
-        return true;
+        return 0;
+    }
+
+    int drawFloor(int step, int height, int offset, float x, float y){
+        
+        return 0;
+    }
+    Color getDarkness(float height){
+        float d = height * 255.0f/GetScreenHeight();
+        d = min(d,255.0f);
+        Color c =  {d,d,d,255};
+        return c;
     }
     bool raycast(float angle, float ix, float iy, int step, float beta)
     {
@@ -86,6 +97,7 @@ public:
         int offset = (1080 / 2) - (height / 2);
         // DrawRectangle(step, offset, 1, height, BLUE);
         drawColumn(step, height, offset, x, y, tileValue);
+        drawFloor(step,height,offset,x,y);
         return true;
     }
 
@@ -142,7 +154,12 @@ public:
         }
         playerrotation += dt * 10 * GetMouseDelta().x;
     }
-
+    void exit(){
+        for(Texture2D t : textures)
+        {
+            UnloadTexture(t);
+        }
+    }
     void process(float dt)
     {
         handleInputs(dt);
@@ -151,5 +168,5 @@ public:
 
 private:
     float *angles;
-    Texture2D images[16];
+    Texture2D textures[16];
 };
