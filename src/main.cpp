@@ -16,7 +16,7 @@ int main ()
 	// Utility function from resource_dir.h to find the resources folder and set it as the current working directory so we can load from it
 	SearchAndSetResourceDir("resources");
 
-	RayCastLogic rayCastLogic(1,1,90);
+	RayCastLogic rayCastLogic(2,2,90);
 
 	// game loop
 	while (!WindowShouldClose())		// run the loop untill the user presses ESCAPE or presses the Close button on the window
@@ -25,9 +25,9 @@ int main ()
 		BeginDrawing();
 
 		ClearBackground(BLACK);
-		char debug[32];
-		snprintf(debug, sizeof(debug), "%f", rayCastLogic.getAngle(1920/4) * RAD2DEG);
-		DrawText(debug,0,0,18,WHITE);
+		
+		rayCastLogic.process(GetFrameTime());
+		DrawText("get hacked",0,0,18,WHITE);
 
 		EndDrawing();
 	}
