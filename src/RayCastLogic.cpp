@@ -15,6 +15,7 @@ public:
     Map map;
     RayCastLogic()
     {
+
     }
 
     RayCastLogic(float x, float y, int fov)
@@ -49,18 +50,20 @@ public:
         DrawTexturePro(textures[tileValue], {column * 1.0f, 0, 1, 100}, {step * 1.0f, offset * 1.0f, 1, height * 1.0f}, {0, 0}, 0, getDarkness(height));
 
         return 0;
-    }
+        }
 
-    int drawFloor(int step, int height, int offset, float x, float y){
-        
+    int drawFloor(int step, int height, int offset, float x, float y)
+    {
         return 0;
     }
+
     Color getDarkness(float height){
         float d = height * 255.0f/GetScreenHeight();
         d = min(d,255.0f);
         Color c =  {d,d,d,255};
         return c;
     }
+
     bool raycast(float angle, float ix, float iy, int step, float beta)
     {
         float initx = ix;
