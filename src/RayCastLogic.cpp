@@ -38,6 +38,7 @@ class RayCastLogic{
 
             }
         }
+
         bool raycast(float angle, float ix, float iy,int index, float beta){
             float initx = ix;
             float inity = iy;
@@ -45,7 +46,7 @@ class RayCastLogic{
             float x = initx;
             float y = inity;
             
-            float scale = 0.5;
+            float scale = 0.005;
 
             float dx = cos(angle);
             float dy = sin(angle);
@@ -58,14 +59,16 @@ class RayCastLogic{
                 if(rayindex > 10000){
                     return false;
                 }
+                rayindex++;
             }
-
-            float distance = sqrt((initx-x)*(initx-x) + (inity-y)*(inity-y)) * cos(beta);
+            float fx = initx - x;
+            float fy = inity - y;
+            float distance = sqrt(fx*fx+fy*fy) * cos(beta);
             
             int height = ((1080)/(distance));
             height=max(min(height,1080*32),1);
 
-            //height *= height/abs(height);   
+
 
             int offset = (1080/2) - (height / 2);
             DrawRectangle(index, offset, 1, height, BLUE);
@@ -86,11 +89,22 @@ class RayCastLogic{
         
         void handleInputs(float dt){
             if(IsKeyDown(KEY_A)){
-                playerrotation-=30*dt;
+                playerx+=cos(playerrotation*DEG2RAD - PI/2)* dt;
+                playery+=sin(playerrotation*DEG2RAD - PI/2)* dt;
             }
             if(IsKeyDown(KEY_D)){
-                playerrotation+=30*dt;
+                playerx+=cos(playerrotation*DEG2RAD + PI/2)* dt;
+                playery+=sin(playerrotation*DEG2RAD + PI/2)* dt;
             }
+            if(IsKeyDown(KEY_W)){
+                playerx+=cos(playerrotation*DEG2RAD)* dt;
+                playery+=sin(playerrotation*DEG2RAD)* dt;
+            }
+            if(IsKeyDown(KEY_S)){
+                playerx-=cos(playerrotation*DEG2RAD) * dt;
+                playery-=sin(playerrotation*DEG2RAD) * dt;
+            }
+            playerrotation+= dt * 10 * GetMouseDelta().x;
         }
 
         void process(float dt){

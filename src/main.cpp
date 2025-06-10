@@ -18,6 +18,8 @@ int main ()
 
 	RayCastLogic rayCastLogic(2,2,90);
 
+	HideCursor();
+	DisableCursor();
 	// game loop
 	while (!WindowShouldClose())		// run the loop untill the user presses ESCAPE or presses the Close button on the window
 	{
@@ -27,7 +29,8 @@ int main ()
 		ClearBackground(BLACK);
 		
 		rayCastLogic.process(GetFrameTime());
-		DrawText("get hacked",0,0,18,WHITE);
+		DrawFPS(0,0);
+		//DrawText("get hacked",0,0,18,WHITE);
 
 		EndDrawing();
 	}
