@@ -18,8 +18,8 @@ int main ()
 
 	RayCastLogic rayCastLogic(2,2,90);
 
-	HideCursor();
-	DisableCursor();
+	//HideCursor();
+	//DisableCursor();
 	// game loop
 	while (!WindowShouldClose())		// run the loop untill the user presses ESCAPE or presses the Close button on the window
 	{
