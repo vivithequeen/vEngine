@@ -24,7 +24,7 @@ public:
     }
 
     void process(float dt)
-    {
+    { 
         velocity.x = (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP)) * WALKSPEED*dt -
                       (IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN)) * WALKSPEED*dt;
         velocity.y = (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) * WALKSPEED*dt -
@@ -38,6 +38,6 @@ public:
                             GetMouseDelta().y * 0.05f, // Rotation: pitch
                             0.0f                       // Rotation: roll
                         },
-                        GetMouseWheelMove() * 2.0f);
+                        0);
     }
 };

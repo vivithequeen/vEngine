@@ -4,52 +4,33 @@
 #include "raymath.h"
 #include "MaterialInstance.cpp"
 using namespace std;
+#ifndef MESH_INSTANCE
+#define MESH_INSTANCE
 
 class MeshInstance
 {
 private:
-    Vector3 position;
-    Vector3 rotation;
 
-    MaterialInstance material;
-    Mesh mesh;
 
-    BoundingBox collider;
+    
+
+
     Matrix matrix;
 
-    string id;
     bool debug = true;
 
 public:
+    string id;
+    Mesh mesh;
+    BoundingBox collider;
+    MaterialInstance material;
+    Vector3 position;
+    Vector3 rotation;
+
     MeshInstance()
     {
-        this->position = (Vector3){0, 0, 0};
-        this->rotation = (Vector3){0, 0, 0};
 
-        this->material = MaterialInstance();
-        mesh = GenMeshCube(1.0f, 1.0f, 1.0f);
-        collider = GetMeshBoundingBox(mesh);
     }
-
-    MeshInstance(Vector3 pos, Vector3 rot, Vector3 di, MaterialInstance mes, string id) // box
-    {
-        this->position = pos;
-        this->rotation = rot;
-        this->material = mes;
-        this->id = id;
-        mesh = GenMeshCube(di.x, di.y, di.z);
-        collider = GetMeshBoundingBox(mesh);
-    }
-    MeshInstance(Vector3 pos, Vector3 rot, Vector2 di, MaterialInstance mes, string id) // plane
-    {
-        this->position = pos;
-        this->rotation = rot;
-        this->material = mes;
-        this->id = id;
-        mesh = GenMeshPlane(di.x, di.y, 1, 1);
-        collider = GetMeshBoundingBox(mesh);
-    }
-
 
     BoundingBox getTransformedBox()
     {
@@ -97,3 +78,4 @@ public:
         }
     }
 };
+#endif

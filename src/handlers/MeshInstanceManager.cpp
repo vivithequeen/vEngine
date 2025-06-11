@@ -6,6 +6,8 @@
 #include "resource_dir.h"
 
 #include "../instances/MeshInstance.cpp"
+#include "../instances/CubeMeshInstance.cpp"
+#include "../instances/PlaneMeshInstance.cpp"
 using namespace std;
 
 class MeshInstanceManager
@@ -37,12 +39,12 @@ public:
 
 	int makeCubeMesh(Vector3 pos, Vector3 rot, Vector3 di, MaterialInstance mes){
 
-		MeshInstance m(pos,rot,di,mes,makeId("cubemesh"));
+		CubeMeshInstance m(pos,rot,di,mes,makeId("cubemesh"));
 		addMesh(m);
 		return 0;
 	}
 	int makePlaneMesh(Vector3 pos, Vector3 rot, Vector2 di, MaterialInstance mes){
-		MeshInstance m(pos, rot, di, mes, makeId("planemesh"));
+		PlaneMeshInstance m(pos, rot, di, mes, makeId("planemesh"));
 		addMesh(m);
 		return 0;
 	}

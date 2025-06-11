@@ -16,6 +16,7 @@ private:
 public:
     MaterialInstanceManager()
     {
+        
     }
     int addMaterial(MaterialInstance materialInstance)
     {

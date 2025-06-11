@@ -13,14 +13,17 @@ using namespace std;
 class InstanceManager
 {
     private:
+
     MeshInstanceManager meshHander;
     MaterialInstanceManager materialHandler;
+    
     public:
     InstanceManager()
     {
         meshHander = MeshInstanceManager();
         materialHandler = MaterialInstanceManager();
 
+        //testing!!!!
         materialHandler.addMaterial(MaterialInstance("testMeow.png"));
         meshHander.makeCubeMesh((Vector3){0,0,0},(Vector3){0,0,0},(Vector3){1,1,1},materialHandler.getMaterialByIndex(0));
         meshHander.makePlaneMesh((Vector3){0,0,0},(Vector3){0,0,0},(Vector2){2,2},materialHandler.getMaterialByIndex(0));
