@@ -5,10 +5,9 @@
 #include "MaterialInstance.cpp"
 using namespace std;
 
-
 class MeshInstance
 {
-public:
+private:
     Vector3 position;
     Vector3 rotation;
 
@@ -18,8 +17,10 @@ public:
     BoundingBox collider;
     Matrix matrix;
 
+    string id;
     bool debug = true;
 
+public:
     MeshInstance()
     {
         this->position = (Vector3){0, 0, 0};
@@ -30,25 +31,28 @@ public:
         collider = GetMeshBoundingBox(mesh);
     }
 
-    MeshInstance(Vector3 pos, Vector3 rot, Vector3 di, MaterialInstance mes) // box
+    MeshInstance(Vector3 pos, Vector3 rot, Vector3 di, MaterialInstance mes, string id) // box
     {
         this->position = pos;
         this->rotation = rot;
         this->material = mes;
+        this->id = id;
         mesh = GenMeshCube(di.x, di.y, di.z);
         collider = GetMeshBoundingBox(mesh);
     }
-    MeshInstance(Vector3 pos, Vector3 rot, Vector2 di,Vector2 res , MaterialInstance mes) // box
+    MeshInstance(Vector3 pos, Vector3 rot, Vector2 di, MaterialInstance mes, string id) // plane
     {
         this->position = pos;
         this->rotation = rot;
         this->material = mes;
-        mesh = GenMeshPlane(di.x,di.y,res.x,res.y);
+        this->id = id;
+        mesh = GenMeshPlane(di.x, di.y, 1, 1);
         collider = GetMeshBoundingBox(mesh);
     }
-    
 
-    BoundingBox getTransformedBox(){
+
+    BoundingBox getTransformedBox()
+    {
         matrix = MatrixMultiply(MatrixRotate(rotation, 1), MatrixTranslate(position.x, position.y, position.z)); // rotation DOES NOT WORK!
         DrawMesh(mesh, material.getMaterial(), matrix);
         Vector3 corners[8] = {
@@ -75,15 +79,16 @@ public:
             newMin = Vector3Min(newMin, corners[i]);
             newMax = Vector3Max(newMax, corners[i]);
         }
-        return (BoundingBox){newMin, newMax};     
+        return (BoundingBox){newMin, newMax};
     }
-    BoundingBox getBoundingBox(){
+    BoundingBox getBoundingBox()
+    {
         return getTransformedBox();
     }
 
     void draw()
     {
-  
+
         BoundingBox transformedBox = getTransformedBox();
 
         if (debug)

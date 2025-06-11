@@ -5,7 +5,7 @@
 #include "resource_dir.h"	
 #include "raymath.h"
 
-#include "handlers/InstanceHandler.cpp"
+#include "handlers/InstanceManager.cpp"
 #include "Player.cpp"
 using namespace std;
 
@@ -29,7 +29,7 @@ int main ()
 	DisableCursor();
 	// game loop
 
-	InstanceHandler instanceHandler;
+	InstanceManager instanceHandler;
 
 	while (!WindowShouldClose())		// run the loop untill the user presses ESCAPE or presses the Close button on the window
 	{

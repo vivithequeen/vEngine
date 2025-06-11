@@ -3,40 +3,41 @@
 #include "raylib.h"
 #include "resource_dir.h"
 #include "raymath.h"
-#include <cstring> 
+#include <cstring>
 
 #ifndef MATERIAL_INSTANCE
 #define MATERIAL_INSTANCE
 
 using namespace std;
 
-
-
 class MaterialInstance
 {
-    private:
-        Material material;
-        Texture materialTexture;
-        string name;
-    public:
-        MaterialInstance(){
-            material = LoadMaterialDefault();
-        }
-        MaterialInstance(string filepath, string n){
-	        Material m = LoadMaterialDefault();
+private:
+    Material material;
+    Texture materialTexture;
+    string id;
 
-            char f[filepath.length()+1];
-            strcpy(f,filepath.c_str());
-	        materialTexture = LoadTexture(f);
+public:
+    MaterialInstance()
+    {
+        material = LoadMaterialDefault();
+    }
 
-	        SetMaterialTexture(&m, MATERIAL_MAP_DIFFUSE, materialTexture);
+    MaterialInstance(string filepath/*, string id*/)
+    {
+        Material m = LoadMaterialDefault();
 
-            this->material = m;
-            this->name = n;
-        }
-        Material getMaterial(){
-            return material;
-        }
+        char f[filepath.length() + 1];
+        strcpy(f, filepath.c_str());
+        materialTexture = LoadTexture(f);
 
+        SetMaterialTexture(&m, MATERIAL_MAP_DIFFUSE, materialTexture);
+        //this->id = id;
+        this->material = m;
+    }
+    Material getMaterial()
+    {
+        return material;
+    }
 };
 #endif

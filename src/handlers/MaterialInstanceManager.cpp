@@ -2,28 +2,30 @@
 #include <vector>
 #include "raylib.h"
 
-#include "resource_dir.h"	
+#include "resource_dir.h"
 #include "raymath.h"
 
 #include "../instances/MaterialInstance.cpp"
 
 using namespace std;
-class MaterialHandler{
-    private:
+class MaterialInstanceManager
+{
+private:
     vector<MaterialInstance> materials;
-    public:
-    MaterialHandler(){
 
+public:
+    MaterialInstanceManager()
+    {
     }
-    int addMaterial(MaterialInstance materialInstance){
+    int addMaterial(MaterialInstance materialInstance)
+    {
 
-        
         materials.push_back(materialInstance);
         return 0;
     }
 
-    MaterialInstance getMaterialByIndex(int index){
+    MaterialInstance getMaterialByIndex(int index)
+    {
         return materials.at(index);
     }
-
 };
