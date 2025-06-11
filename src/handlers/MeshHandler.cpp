@@ -26,7 +26,7 @@ class MeshHandler
         return meshs.at(index);
     }
 	int drawMesh(){
-
+		//meshs[0].draw();
 		for(MeshInstance mesh : meshs){
 			mesh.draw();
 		}
