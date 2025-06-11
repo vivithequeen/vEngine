@@ -2,6 +2,7 @@
 #include "raylib.h"
 #include "resource_dir.h"
 #include "raymath.h"
+#include "MaterialInstance.cpp"
 using namespace std;
 
 
@@ -29,7 +30,7 @@ public:
         collider = GetMeshBoundingBox(mesh);
     }
 
-    MeshInstance(Vector3 position, Vector3 rotation, Vector3 dimentions, Material material) // box
+    MeshInstance(Vector3 position, Vector3 rotation, Vector3 dimentions, MaterialInstance material) // box
     {
         this->position = position;
         this->rotation = rotation;

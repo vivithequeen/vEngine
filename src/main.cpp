@@ -5,6 +5,7 @@
 #include "resource_dir.h"	
 #include "raymath.h"
 
+#include "handlers/InstanceHandler.cpp"
 #include "Player.cpp"
 using namespace std;
 
@@ -21,10 +22,6 @@ int main ()
 	SearchAndSetResourceDir("resources");
 
 
-	Material test = LoadMaterialDefault();
-	Texture texture;
-	texture = LoadTexture("testMeow.png");
-	SetMaterialTexture(&test, MATERIAL_MAP_DIFFUSE, texture);
 
 
 	Player player;
@@ -53,8 +50,6 @@ int main ()
 	// cleanup
 	// unload our texture so it can be cleaned up
 
-	UnloadMaterial(test);
-	UnloadTexture(texture);
 	// destroy the window and cleanup the OpenGL context
 	CloseWindow();
 	return 0;

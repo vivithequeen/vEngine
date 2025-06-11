@@ -10,7 +10,32 @@ using namespace std;
 
 class MeshHandler
 {
-	vector<MeshInstance> meshs= {
-		MeshInstance((Vector3){0,3,0},(Vector3){0,0,0},(Vector3){1,3,1},test),
-	};
+	private:
+	vector<MeshInstance> meshs = {};
+	public:
+	MeshHandler(){
+
+	}
+
+    int addMesh(MeshInstance meshInstance){
+        meshs.push_back(meshInstance);
+		return 0;
+    }
+
+    MeshInstance getMaterialByIndex(int index){
+        return meshs.at(index);
+    }
+	int drawMesh(){
+
+		for(MeshInstance mesh : meshs){
+			mesh.draw();
+		}
+
+		return 0;
+	}
+	int process(){
+
+        drawMesh();
+        return 0;
+    }
 };

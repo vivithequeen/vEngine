@@ -6,15 +6,20 @@
 #include "raymath.h"
 
 #include "../instances/MaterialInstance.cpp"
+
+using namespace std;
 class MaterialHandler{
     private:
-    std::vector<MaterialInstance> materials;
+    vector<MaterialInstance> materials;
     public:
     MaterialHandler(){
 
     }
     int addMaterial(MaterialInstance materialInstance){
+
+        
         materials.push_back(materialInstance);
+        return 0;
     }
 
     MaterialInstance getMaterialByIndex(int index){
