@@ -5,10 +5,12 @@
 #include "resource_dir.h"	
 #include "raymath.h"
 
+#include "../instances/MaterialInstance.cpp"
 class MaterialHandler{
 
-    
+    vector<
     MaterialHandler(){
 
     }
+
 };

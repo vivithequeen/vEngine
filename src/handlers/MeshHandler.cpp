@@ -3,9 +3,7 @@
 #include <vector>
 
 #include "raylib.h"
-#include "rcamera.h"
 #include "resource_dir.h"
-#include "raymath.h"
 
 #include "MeshInstance.cpp"
 using namespace std;
