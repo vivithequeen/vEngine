@@ -29,7 +29,7 @@ int main ()
 	DisableCursor();
 	// game loop
 
-
+	//InstanceHandler instanceHandler;
 
 	while (!WindowShouldClose())		// run the loop untill the user presses ESCAPE or presses the Close button on the window
 	{
@@ -40,7 +40,7 @@ int main ()
 		ClearBackground(BLACK);
 		BeginMode3D(player.camera);
 		
-		
+		//instanceHandler.process();
 
 		EndMode3D();
 		DrawFPS(0,0);

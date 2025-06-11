@@ -5,7 +5,7 @@
 #include "raylib.h"
 #include "resource_dir.h"
 
-#include "MeshInstance.cpp"
+#include "../instances/MeshInstance.cpp"
 using namespace std;
 
 class MeshHandler

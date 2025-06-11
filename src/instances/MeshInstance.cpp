@@ -12,7 +12,7 @@ public:
     Vector3 position;
     Vector3 rotation;
 
-    Material material;
+    MaterialInstance material;
     Mesh mesh;
 
     BoundingBox collider;
@@ -25,24 +25,24 @@ public:
         this->position = (Vector3){0, 0, 0};
         this->rotation = (Vector3){0, 0, 0};
 
-        this->material = LoadMaterialDefault();
+        this->material = MaterialInstance();
         mesh = GenMeshCube(1.0f, 1.0f, 1.0f);
         collider = GetMeshBoundingBox(mesh);
     }
 
-    MeshInstance(Vector3 position, Vector3 rotation, Vector3 dimentions, MaterialInstance material) // box
+    MeshInstance(Vector3 p, Vector3 r, Vector3 d, MaterialInstance m) // box
     {
-        this->position = position;
-        this->rotation = rotation;
-        this->material = material;
-        mesh = GenMeshCube(dimentions.x, dimentions.y, dimentions.z);
+        this->position = p;
+        this->rotation = r;
+        this->material = m;
+        mesh = GenMeshCube(d.x, d.y, d.z);
         collider = GetMeshBoundingBox(mesh);
     }
 
     void draw()
     {
         matrix = MatrixMultiply(MatrixRotate(rotation, 1), MatrixTranslate(position.x, position.y, position.z)); // rotation DOES NOT WORK!
-        DrawMesh(mesh, material, matrix);
+        DrawMesh(mesh, material.getMaterial(), matrix);
         Vector3 corners[8] = {
             {collider.min.x, collider.min.y, collider.min.z},
             {collider.min.x, collider.min.y, collider.max.z},
