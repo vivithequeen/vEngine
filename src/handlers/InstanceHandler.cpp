@@ -21,8 +21,9 @@ class InstanceHandler
         meshHander = MeshHandler();
         materialHandler = MaterialHandler();
 
-        materialHandler.addMaterial(MaterialInstance("teskMeow.png","test"));
-        meshHander.addMesh(MeshInstance((Vector3){1,1,1},(Vector3){0,0,0},(Vector3){1,1,1},materialHandler.getMaterialByIndex(0)));
+        materialHandler.addMaterial(MaterialInstance("testMeow.png","test"));
+        meshHander.addMesh(MeshInstance((Vector3){0,0,0},(Vector3){0,0,0},(Vector3){1,1,1},materialHandler.getMaterialByIndex(0)));
+        meshHander.addMesh(MeshInstance((Vector3){0,0,0},(Vector3){0,0,0},(Vector2){4,4},(Vector2){1,1},materialHandler.getMaterialByIndex(0)));
     }
 
     int process(){

@@ -39,7 +39,7 @@ int main ()
 		BeginDrawing();
 		ClearBackground(BLACK);
 		BeginMode3D(player.camera);
-		
+		DrawGrid(17,1);
 		instanceHandler.process();
 
 		EndMode3D();

@@ -30,17 +30,25 @@ public:
         collider = GetMeshBoundingBox(mesh);
     }
 
-    MeshInstance(Vector3 p, Vector3 r, Vector3 d, MaterialInstance m) // box
+    MeshInstance(Vector3 pos, Vector3 rot, Vector3 di, MaterialInstance mes) // box
     {
-        this->position = p;
-        this->rotation = r;
-        this->material = m;
-        mesh = GenMeshCube(d.x, d.y, d.z);
+        this->position = pos;
+        this->rotation = rot;
+        this->material = mes;
+        mesh = GenMeshCube(di.x, di.y, di.z);
         collider = GetMeshBoundingBox(mesh);
     }
-
-    void draw()
+    MeshInstance(Vector3 pos, Vector3 rot, Vector2 di,Vector2 res , MaterialInstance mes) // box
     {
+        this->position = pos;
+        this->rotation = rot;
+        this->material = mes;
+        mesh = GenMeshPlane(di.x,di.y,res.x,res.y);
+        collider = GetMeshBoundingBox(mesh);
+    }
+    
+
+    BoundingBox getTransformedBox(){
         matrix = MatrixMultiply(MatrixRotate(rotation, 1), MatrixTranslate(position.x, position.y, position.z)); // rotation DOES NOT WORK!
         DrawMesh(mesh, material.getMaterial(), matrix);
         Vector3 corners[8] = {
@@ -67,7 +75,16 @@ public:
             newMin = Vector3Min(newMin, corners[i]);
             newMax = Vector3Max(newMax, corners[i]);
         }
-        BoundingBox transformedBox = {newMin, newMax};
+        return (BoundingBox){newMin, newMax};     
+    }
+    BoundingBox getBoundingBox(){
+        return getTransformedBox();
+    }
+
+    void draw()
+    {
+  
+        BoundingBox transformedBox = getTransformedBox();
 
         if (debug)
         {

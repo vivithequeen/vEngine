@@ -16,6 +16,7 @@ class MaterialInstance
 {
     private:
         Material material;
+        Texture materialTexture;
         string name;
     public:
         MaterialInstance(){
@@ -23,12 +24,12 @@ class MaterialInstance
         }
         MaterialInstance(string filepath, string n){
 	        Material m = LoadMaterialDefault();
-	        Texture texture;
+
             char f[filepath.length()+1];
             strcpy(f,filepath.c_str());
-	        texture = LoadTexture(f);
+	        materialTexture = LoadTexture(f);
 
-	        SetMaterialTexture(&m, MATERIAL_MAP_DIFFUSE, texture);
+	        SetMaterialTexture(&m, MATERIAL_MAP_DIFFUSE, materialTexture);
 
             this->material = m;
             this->name = n;
