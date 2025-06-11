@@ -30,22 +30,24 @@ int main ()
 	HideCursor();
 	DisableCursor();
 	// game loop
-	Mesh m = GenMeshCube(3,3,3);
-
-	Matrix matrix = MatrixTranslate(0.0f, 3.0f, 0.0f);
+	Mesh m = GenMeshTorus(30,2,20,12);
+	float rotation = 0;
+	Matrix matrix = MatrixMultiply(MatrixRotate((Vector3){1,1,1},30), MatrixTranslate(0.0f, 4.0f, 0.0f));
 	while (!WindowShouldClose())		// run the loop untill the user presses ESCAPE or presses the Close button on the window
 	{
+		rotation+=3;
+		matrix = MatrixMultiply(MatrixRotate((Vector3){1,1,1},rotation), MatrixTranslate(0.0f, 4.0f, 0.0f));
 		// drawing
 		player.process(GetFrameTime());
 		BeginDrawing();
 		ClearBackground(BLACK);
 		BeginMode3D(player.camera);
 		
-		DrawPlane((Vector3){ 0.0f, 0.0f, 0.0f }, (Vector2){ 32.0f, 32.0f }, LIGHTGRAY); // Draw ground
+		DrawPlane((Vector3){ 0.0f, 0.0f, 0.0f }, (Vector2){ 32.0f, 32.0f }, PINK); // Draw ground
         DrawCube((Vector3){ -16.0f, 2.5f, 0.0f }, 1.0f, 5.0f, 32.0f, BLUE);     // Draw a blue wall
         DrawCube((Vector3){ 16.0f, 2.5f, 0.0f }, 1.0f, 5.0f, 32.0f, LIME);      // Draw a green wall
         DrawCube((Vector3){ 0.0f, 2.5f, 16.0f }, 32.0f, 5.0f, 1.0f, GOLD); 		
-		
+		//DrawBillboard(player.camera,texture,(Vector3){0,3,0},3,WHITE);
 		DrawMesh(m, test, matrix);
 
 		EndMode3D();
