@@ -7,10 +7,18 @@
 
 #include "../instances/MaterialInstance.cpp"
 class MaterialHandler{
-
-    vector<
+    private:
+    std::vector<MaterialInstance> materials;
+    public:
     MaterialHandler(){
 
+    }
+    int addMaterial(MaterialInstance materialInstance){
+        materials.push_back(materialInstance);
+    }
+
+    MaterialInstance getMaterialByIndex(int index){
+        return materials.at(index);
     }
 
 };
