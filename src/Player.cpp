@@ -12,6 +12,7 @@ public:
     const float WALKSPEED = 7.0f;
 
     Vector3 velocity = {0,0,0};
+    float playerHeight = 2;
     Player()
     {
         camera = {0};
