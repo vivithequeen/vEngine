@@ -47,7 +47,7 @@ public:
 
     BoundingBox getTransformedBox()
     {
-        matrix = MatrixMultiply(MatrixRotate((Vector3){1,0,0}, 0), MatrixTranslate(camera.position.x, camera.position.y, camera.position.z)); // rotation DOES NOT WORK!
+        matrix = MatrixMultiply(MatrixRotate((Vector3){1,0,0}, 0), MatrixTranslate(camera.position.x+velocity.x, camera.position.y+velocity.z, camera.position.z)); // rotation DOES NOT WORK!
 
         Vector3 corners[8] = {
             {collider.min.x, collider.min.y, collider.min.z},

@@ -18,7 +18,7 @@ public:
     MeshInstanceManager meshInstanceManager;
     MaterialInstanceManager materialInstanceManager;
     TextureInstanceManager textureInstanceManager;
-    PlayerInstance player;
+    //PlayerInstance player;
     InstanceManager()
     {
 
@@ -32,7 +32,7 @@ public:
     int process(float dt)
     {
         meshInstanceManager.process();
-        player.process(dt, meshInstanceManager.getMeshs());
+        //player.process(dt, meshInstanceManager.getMeshs());
         return 0;
     }
 };
