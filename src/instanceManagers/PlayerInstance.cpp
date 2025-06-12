@@ -5,15 +5,17 @@
 
 using namespace std;
 
-class Player
+class PlayerInstance
 {
 public:
+    private:
     Camera3D camera;
     const float WALKSPEED = 7.0f;
 
     Vector3 velocity = {0,0,0};
     float playerHeight = 2;
-    Player()
+    public:
+    PlayerInstance()
     {
         camera = {0};
         camera.position = (Vector3){0.0f, 2.0f, 2.0f};
@@ -22,7 +24,9 @@ public:
         camera.fovy = 60.0f;
         camera.projection = CAMERA_PERSPECTIVE;
     }
-
+    Camera3D getCamera(){
+        return camera;
+    }
     void process(float dt)
     { 
         velocity.x = (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP)) * WALKSPEED*dt -

@@ -6,7 +6,7 @@
 #include "raymath.h"
 
 #include "instanceManagers/InstanceManager.cpp"
-#include "Player.cpp"
+
 using namespace std;
 
 int main ()
@@ -24,7 +24,6 @@ int main ()
 
 
 
-	Player player;
 	HideCursor();
 	DisableCursor();
 	// game loop
@@ -35,13 +34,12 @@ int main ()
 	{
 
 		// drawing
-		player.process(GetFrameTime());
 		BeginDrawing();
 		ClearBackground(BLACK);
-		BeginMode3D(player.camera);
+		BeginMode3D(instanceManager.player.getCamera());
 		DrawGrid(17,1);
 
-		instanceManager.process();
+		instanceManager.process(GetFrameTime());
 
 		EndMode3D();
 		DrawFPS(0,0);
