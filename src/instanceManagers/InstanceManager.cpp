@@ -8,7 +8,7 @@
 #include "MeshInstanceManager.cpp"
 #include "MaterialInstanceManager.cpp"
 #include "TextureInstanceManager.cpp"
-#include "../instances/PlayerInstance.cpp"
+
 using namespace std;
 
 class InstanceManager

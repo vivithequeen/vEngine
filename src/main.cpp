@@ -5,8 +5,8 @@
 #include "resource_dir.h"	
 #include "raymath.h"
 
-#include "instanceManagers/InstanceManager.cpp"
-#include "editor/Editor.cpp"
+
+#include "GameWorld.cpp"
 
 using namespace std;
 
@@ -29,8 +29,7 @@ int main ()
 	DisableCursor();
 	// game loop
 
-	InstanceManager instanceManager;
-	Editor editor;
+	GameWorld gameWorld;
 	while (!WindowShouldClose())		// run the loop untill the user presses ESCAPE or presses the Close button on the window
 	{
 
@@ -38,13 +37,11 @@ int main ()
 		BeginDrawing();
 		ClearBackground(BLACK);
 		//BeginMode3D(instanceManager.player.getCamera());
-		BeginMode3D(editor.editorCamera.camera);
-		DrawGrid(17,1);
-
-		instanceManager.process(GetFrameTime());
-		editor.process(GetFrameTime());
+		BeginMode3D(gameWorld.getCurrentCamera());
+		gameWorld.draw3D();
 		EndMode3D();
-		DrawFPS(0,0);
+		gameWorld.draw2D();
+		
 		
 		EndDrawing();
 	}
