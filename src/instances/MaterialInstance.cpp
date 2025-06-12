@@ -14,7 +14,7 @@ class MaterialInstance
 {
 private:
     Material material;
-    Texture materialTexture;
+    //Texture materialTexture;
     string id;
 
 public:
@@ -28,8 +28,8 @@ public:
         Material m = LoadMaterialDefault();
 
 
-        materialTexture = texture;
-        SetMaterialTexture(&m, MATERIAL_MAP_DIFFUSE, materialTexture);
+        //materialTexture = texture;
+        SetMaterialTexture(&m, MATERIAL_MAP_DIFFUSE, texture);
         //this->id = id;
         this->material = m;
     }
