@@ -37,7 +37,7 @@ public:
         camera.up = (Vector3){0.0f, 1.0f, 0.0f};
         camera.fovy = 60.0f;
         camera.projection = CAMERA_PERSPECTIVE;
-        playerSize = GenMeshCube(4, 2, 4);
+        playerSize = GenMeshCube(0.25, 0.5, 0.25);
         collider = GetMeshBoundingBox(playerSize);
     }
     Camera3D getCamera()
@@ -47,7 +47,7 @@ public:
 
     BoundingBox getTransformedBox()
     {
-        matrix = MatrixMultiply(MatrixRotate((Vector3){0,0,0}, 0), MatrixTranslate(playerPosition.x+3, playerPosition.y, playerPosition.z+3)); // rotation DOES NOT WORK!
+        matrix = MatrixMultiply(MatrixRotate((Vector3){1,0,0}, 0), MatrixTranslate(camera.position.x, camera.position.y, camera.position.z)); // rotation DOES NOT WORK!
 
         Vector3 corners[8] = {
             {collider.min.x, collider.min.y, collider.min.z},
@@ -78,10 +78,10 @@ public:
 
     bool collitionCheck(vector<MeshInstance> meshs)
     {
-        collider = getTransformedBox();
+        BoundingBox transformedBox = getTransformedBox();
         for (MeshInstance m : meshs)
         {
-            if (CheckCollisionBoxes(collider, m.getBoundingBox()))
+            if (CheckCollisionBoxes(transformedBox, m.getBoundingBox()))
             {
                 return true;
             }
@@ -100,11 +100,12 @@ public:
         Vector3 rotationVelocity = {0,0,0};
         rotationVelocity.x += GetMouseDelta().x * 0.05f;
         rotationVelocity.y += GetMouseDelta().y * 0.05f;
-        
 
-        collider = getTransformedBox();
+        playerPosition+=velocity;
+
+        BoundingBox transformedBox = getTransformedBox();
         rotation += rotationVelocity;
-        DrawBoundingBox(collider,RED);
+        DrawBoundingBox(transformedBox,(collitionCheck(meshs) ? RED : GREEN));//
         //if (!collitionCheck(meshs))
         {
             UpdateCameraPro(&camera,
