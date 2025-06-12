@@ -14,6 +14,7 @@ class MeshInstanceManager
 {
 private:
 	vector<MeshInstance> meshs = {};
+
 	int currentid;
 public:
 	MeshInstanceManager()
@@ -58,6 +59,9 @@ public:
 		}
 
 		return 0;
+	}
+	vector<MeshInstance> getMeshs(){
+		return meshs;
 	}
 	int process()
 	{

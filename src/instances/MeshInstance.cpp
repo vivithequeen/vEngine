@@ -11,12 +11,10 @@ class MeshInstance
 {
 private:
 
-
-    
-
-
     Matrix matrix;
 
+
+    bool doesCollition = true;
     bool debug = true;
 
 public:
@@ -35,7 +33,7 @@ public:
     BoundingBox getTransformedBox()
     {
         matrix = MatrixMultiply(MatrixRotate(rotation, 1), MatrixTranslate(position.x, position.y, position.z)); // rotation DOES NOT WORK!
-        DrawMesh(mesh, material.getMaterial(), matrix);
+
         Vector3 corners[8] = {
             {collider.min.x, collider.min.y, collider.min.z},
             {collider.min.x, collider.min.y, collider.max.z},
@@ -71,7 +69,7 @@ public:
     {
 
         BoundingBox transformedBox = getTransformedBox();
-
+        DrawMesh(mesh, material.getMaterial(), matrix);
         if (debug)
         {
             DrawBoundingBox(transformedBox, RED);
