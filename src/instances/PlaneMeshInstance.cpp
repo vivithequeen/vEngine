@@ -11,13 +11,13 @@ class PlaneMeshInstance : public MeshInstance{
     private:
         Vector2 dimentions;
     public:
-    PlaneMeshInstance(Vector3 pos, Vector3 rot, Vector2 di, MaterialInstance mes, string id) // plane
+    PlaneMeshInstance(Vector3 pos, Vector3 rot, Vector2 di, MaterialInstance mes, string mId) // plane
     {
         this->position = pos;
         this->rotation = rot;
         this->material = mes;
         this->dimentions = di;
-        this->id = id;
+        this->id = mId;
         updateMesh();
 
     }

@@ -23,14 +23,12 @@ public:
         material = LoadMaterialDefault();
     }
 
-    MaterialInstance(string filepath/*, string id*/)
+    MaterialInstance(Texture texture/*, string id*/)
     {
         Material m = LoadMaterialDefault();
 
-        char f[filepath.length() + 1];
-        strcpy(f, filepath.c_str());
-        materialTexture = LoadTexture(f);
 
+        materialTexture = texture;
         SetMaterialTexture(&m, MATERIAL_MAP_DIFFUSE, materialTexture);
         //this->id = id;
         this->material = m;

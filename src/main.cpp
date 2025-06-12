@@ -5,7 +5,7 @@
 #include "resource_dir.h"	
 #include "raymath.h"
 
-#include "handlers/InstanceManager.cpp"
+#include "instanceManagers/InstanceManager.cpp"
 #include "Player.cpp"
 using namespace std;
 
@@ -40,7 +40,7 @@ int main ()
 		ClearBackground(BLACK);
 		BeginMode3D(player.camera);
 		DrawGrid(17,1);
-		
+
 		instanceManager.process();
 
 		EndMode3D();

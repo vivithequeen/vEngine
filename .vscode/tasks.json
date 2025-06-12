@@ -8,23 +8,21 @@
             "type": "process",
             "command": "make",
             "windows": {
-                "command": "mingw32-make.exe"
+                "command": "mingw32-make.exe",
             },
             "osx": {
                 "args": [
                     "config=debug_arm64"
-                ]
+                ],
             },
             "group": {
-                "kind": "test",
+                "kind": "build",
                 "isDefault": true
             },
             "problemMatcher": [
                 "$gcc"
             ],
-            "dependsOn": [
-                "UpdateMake"
-            ]
+            "dependsOn":["UpdateMake"]
         },
         {
             "label": "build release",
@@ -34,25 +32,23 @@
                 "command": "mingw32-make.exe",
                 "args": [
                     "config=release_x64"
-                ]
+                ],
             },
             "linux": {
                 "args": [
                     "config=release_x64"
-                ]
+                ],
             },
             "osx": {
                 "args": [
                     "config=release_arm64"
-                ]
+                ],
             },
             "group": "build",
             "problemMatcher": [
                 "$gcc"
             ],
-            "dependsOn": [
-                "UpdateMake"
-            ]
+            "dependsOn":["UpdateMake"]
         },
         {
             "label": "Clean",
@@ -62,25 +58,23 @@
                 "command": "mingw32-make.exe",
                 "args": [
                     "clean"
-                ]
+                ],
             },
             "linux": {
                 "args": [
                     "clean"
-                ]
+                ],
             },
             "osx": {
                 "args": [
                     "clean"
-                ]
+                ],
             },
             "group": "build",
             "problemMatcher": [
                 "$gcc"
             ],
-            "dependsOn": [
-                "UpdateMake"
-            ]
+            "dependsOn":["UpdateMake"]
         },
         {
             "label": "UpdateMake",
@@ -102,30 +96,6 @@
                 "command": "premake5.osx"
             },
             "group": "build"
-        },
-        {
-            "type": "cppbuild",
-            "label": "C/C++: clang++ build active file",
-            "command": "/usr/bin/clang++",
-            "args": [
-                "-fcolor-diagnostics",
-                "-fansi-escape-codes",
-                "-g",
-                "${file}",
-                "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
-            ],
-            "options": {
-                "cwd": "${fileDirname}"
-            },
-            "problemMatcher": [
-                "$gcc"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "detail": "compiler: /usr/bin/clang++"
         }
     ]
 }
