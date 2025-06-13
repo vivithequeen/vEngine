@@ -4,7 +4,7 @@
 #include "rcamera.h"
 #include "resource_dir.h"	
 #include "raymath.h"
-
+#include "imgui.h"
 #include "rlImGui.h"
 
 #include "GameWorld.cpp"
@@ -14,6 +14,7 @@ using namespace std;
 int main ()
 {
 	rlImGuiSetup(true);
+
 	// Tell the window to use vsync and work on high DPI displays
 	SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
 
@@ -26,8 +27,8 @@ int main ()
 
 
 
-	HideCursor();
-	DisableCursor();
+	//HideCursor();
+	//DisableCursor();
 	// game loop
 
 	GameWorld gameWorld;
