@@ -19,24 +19,25 @@ enum { // mode
 class GameWorld
 {
     private:
-        int gameMode = GAME;
+        
     public:
+        int gameMode;
     	InstanceManager instanceManager;
     	Editor editor;
         PlayerInstance player;
         
     GameWorld()
     {
-
+        gameMode = EDIT;
     }
 
 
     Camera getCurrentCamera()
     {
-        if(gameMode = EDIT){
+        if(gameMode == EDIT){
             return editor.editorCamera.camera;
         }
-        if(gameMode = GAME){
+        if(gameMode == GAME){
             return player.getCamera();
         }
         return Camera();
@@ -61,40 +62,9 @@ class GameWorld
 
     int draw2D(){
         DrawFPS(0,0);
-        rlImGuiBegin();
-        bool my_tool_active = true;
-        bool *b = &my_tool_active;
-// Create a window called "My First Tool", with a menu bar.
-        ImGui::Begin("My First Tool", b, ImGuiWindowFlags_MenuBar);
-        if (ImGui::BeginMenuBar())
-        {
-            if (ImGui::BeginMenu("File"))
-            {
-                if (ImGui::MenuItem("Open..", "Ctrl+O")) { /* Do stuff */ }
-                if (ImGui::MenuItem("Save", "Ctrl+S"))   { /* Do stuff */ }
-                if (ImGui::MenuItem("Close", "Ctrl+W"))  { my_tool_active = false; }
-                ImGui::EndMenu();
-            }
-            ImGui::EndMenuBar();
+        if(gameMode == EDIT){
+            editor.draw2D();
         }
-
-
-
-        // Generate samples and plot them
-        float samples[100];
-        for (int n = 0; n < 100; n++)
-            samples[n] = sinf(n * 0.2f + ImGui::GetTime() * 1.5f);
-        ImGui::PlotLines("Samples", samples, 100);
-
-        // Display contents in a scrolling region
-        ImGui::TextColored(ImVec4(1,1,0,1), "Important Stuff");
-        ImGui::BeginChild("Scrolling");
-        for (int n = 0; n < 50; n++)
-            ImGui::Text("%04d: Some text", n);
-        ImGui::EndChild();
-
-        ImGui::End();
-        rlImGuiEnd();
 
         return 0;
     }

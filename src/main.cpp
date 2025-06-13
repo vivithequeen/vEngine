@@ -25,12 +25,13 @@ int main ()
 	SearchAndSetResourceDir("resources");
 
 
-
+	rlImGuiSetup(true);
 
 	//HideCursor();
 	//DisableCursor();
 	// game loop
-
+ 	ImGuiIO& io = ImGui::GetIO();
+    io.Fonts->AddFontFromFileTTF("resources/DMMono-Regular.ttf", 24.0f); // path and size
 	GameWorld gameWorld;
 	while (!WindowShouldClose())		// run the loop untill the user presses ESCAPE or presses the Close button on the window
 	{
