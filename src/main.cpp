@@ -33,6 +33,7 @@ int main ()
  	ImGuiIO& io = ImGui::GetIO();
     io.Fonts->AddFontFromFileTTF("resources/DMMono-Regular.ttf", 24.0f); // path and size
 	GameWorld gameWorld;
+	RenderTexture2D renderTexture = LoadRenderTexture(1920, 1080);
 	while (!WindowShouldClose())		// run the loop untill the user presses ESCAPE or presses the Close button on the window
 	{
 
@@ -40,10 +41,15 @@ int main ()
 		BeginDrawing();
 		ClearBackground(BLACK);
 		//BeginMode3D(instanceManager.player.getCamera());
+
+		BeginTextureMode(renderTexture);
+		ClearBackground(BLACK);
 		BeginMode3D(gameWorld.getCurrentCamera());
 		gameWorld.draw3D();
 		EndMode3D();
-		gameWorld.draw2D();
+		EndTextureMode();
+
+		gameWorld.draw2D(renderTexture);
 		
 		
 		EndDrawing();

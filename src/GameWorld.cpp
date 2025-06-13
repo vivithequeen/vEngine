@@ -60,11 +60,11 @@ class GameWorld
         return 0;
     }
 
-    int draw2D(){
+    int draw2D(RenderTexture2D renderTexture){
         DrawFPS(0,0);
-        if(gameMode == EDIT){
-            editor.draw2D();
-        }
+
+        editor.draw2D(renderTexture);
+
 
         return 0;
     }
