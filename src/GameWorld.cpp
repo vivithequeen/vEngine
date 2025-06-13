@@ -5,8 +5,6 @@
 #include "resource_dir.h"	
 #include "raymath.h"
 
-#define RAYGUI_IMPLEMENTATION
-#include "raygui.h"
 
 #include "instanceManagers/InstanceManager.cpp"
 #include "editor/Editor.cpp"
@@ -40,6 +38,7 @@ class GameWorld
         if(gameMode = GAME){
             return player.getCamera();
         }
+        return Camera();
     }
 
     int draw3D(){
@@ -61,7 +60,7 @@ class GameWorld
 
     int draw2D(){
         DrawFPS(0,0);
-
+        
 
         return 0;
     }
