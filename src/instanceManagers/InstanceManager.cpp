@@ -9,6 +9,9 @@
 #include "MaterialInstanceManager.cpp"
 #include "TextureInstanceManager.cpp"
 
+
+#ifndef INSTANCE_MANAGER
+#define INSTANCE_MANAGER
 using namespace std;
 
 class InstanceManager
@@ -36,3 +39,4 @@ public:
         return 0;
     }
 };
+#endif

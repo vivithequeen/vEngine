@@ -6,7 +6,8 @@
 #include <cstring>
 #include "MeshInstance.cpp"
 
-
+#ifndef PLANE_MESH_INSTANCE
+#define PLANE_MESH_INSTANCE
 class PlaneMeshInstance : public MeshInstance{
     private:
         Vector2 dimentions;
@@ -27,3 +28,4 @@ class PlaneMeshInstance : public MeshInstance{
         return 0;
     }
 };
+#endif

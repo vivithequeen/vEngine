@@ -8,6 +8,8 @@
 #include "../instances/MaterialInstance.cpp"
 
 using namespace std;
+#ifndef MATERIAL_INSTANCE_MANAGER
+#define MATERIAL_INSTANCE_MANAGER
 class MaterialInstanceManager
 {
 private:
@@ -30,3 +32,4 @@ public:
         return materials.at(index);
     }
 };
+#endif

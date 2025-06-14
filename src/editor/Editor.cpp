@@ -7,7 +7,7 @@
 #include "raymath.h"
 #include "imgui.h"
 #include "rlImGui.h"
-
+#include "../instanceManagers/InstanceManager.cpp"
 #include "EditorCamera.cpp"
 
 class Editor
@@ -37,7 +37,7 @@ public:
         return 0;
     }
 
-    int draw2D(RenderTexture2D renderTexture)
+    int draw2D(RenderTexture2D renderTexture, InstanceManager instanceManager)
     {
 
         rlImGuiBegin();
@@ -57,6 +57,7 @@ public:
 
         editorSettingsWindow();
         gameWindow(renderTexture);
+        instanceManagerWindow();
         ImGui::PopFont();
 
         rlImGuiEnd();
@@ -81,9 +82,9 @@ public:
         if (ImGui::BeginMenu("Windows"))
         {
 
-            ImGui::MenuItem("Editor Settings", NULL, &editorSettingsOpen); // errors because it doesnt like me
-            ImGui::MenuItem("Game Window", NULL, &gameWindowOpen);         // errors because it doesnt like me
-
+            ImGui::MenuItem("Editor Settings", NULL, &editorSettingsOpen); 
+            ImGui::MenuItem("Game Window", NULL, &gameWindowOpen);         
+            ImGui::MenuItem("Instance Manager", NULL, &instanceManagerOpen);
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Save"))
@@ -144,45 +145,54 @@ public:
         }
         return 0;
     }
-    int instanceManager()
+    int instanceManagerWindow()
     {
         if (instanceManagerOpen)
         {
-            // does not scale correctly, it should keep its proportions
-
 
             ImGui::Begin("Instance Manager", &instanceManagerOpen, ImGuiWindowFlags_MenuBar);
+            if(ImGui::BeginTabBar("Instances")){
+                if(ImGui::BeginTabItem("Mesh")){
 
+                    //for each intance
 
+                    //name of instance 
+                    //id of instance
+                    //texture instance name and id
+                    //3d x,y,z quards
+                    //3d rotation
+                    //copy
+                    //delete
+                    static char name[128] = "Type Here";
+                    ImGui::SeparatorText("Mesh Instance I"); // placeholder name
 
+                    ImGui::InputText("Name of Instance", name,128);
 
-            ImGui::End();
-        }
-        return 0;
-    }
-    int gameWindow(RenderTexture2D renderTexture)
-    {
-        if (gameWindowOpen)
-        {
+                    ImGui::SeparatorText("3D Values"); // placeholder name
+                    
+                    //ImGui::LabelText("Placeholer id","");
+                    float position[3] = { 0.0f, 0.0f, 0.0f};
+                    float rotation[3] = { 0.0f, 0.0f, 0.0f};
 
-            // does not scale correctly, it should keep its proportions
-            ImTextureID texture = (ImTextureID)(uintptr_t)renderTexture.texture.id;
+                    ImGui::InputFloat3("Position", position);
+                    ImGui::InputFloat3("Rotation", rotation);
 
-            ImGui::Begin("Game Window", &gameWindowOpen, ImGuiWindowFlags_MenuBar);
-
-            if (ImGui::BeginMenuBar())
-            {
-                if (ImGui::BeginMenu("File"))
-                {
-                    ImGui::EndMenu();
+                    ImGui::EndTabItem();
                 }
-                ImGui::EndMenuBar();
+                if(ImGui::BeginTabItem("Models")){
+                    ImGui::EndTabItem();
+                }
+                if(ImGui::BeginTabItem("Materials")){
+                    ImGui::EndTabItem();
+                }
+
+
+                ImGui::EndTabBar();
             }
 
-            ImGui::Image(texture, ImGui::GetWindowSize(), ImVec2(0, 1), ImVec2(1, 0));
-
             ImGui::End();
         }
         return 0;
     }
+
 };

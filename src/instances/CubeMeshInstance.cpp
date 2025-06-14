@@ -5,7 +5,8 @@
 #include "raymath.h"
 #include <cstring>
 #include "MeshInstance.cpp"
-
+#ifndef CUBE_MESH_INSTANCE
+#define CUBE_MESH_INSTANCE
 class CubeMeshInstance: public MeshInstance
 {   
     private:
@@ -29,3 +30,4 @@ class CubeMeshInstance: public MeshInstance
         return 0;
     }
 };
+#endif

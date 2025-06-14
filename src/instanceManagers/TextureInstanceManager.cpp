@@ -7,6 +7,9 @@
 
 using namespace std;
 
+#ifndef TEXUTRE_INSTANCE_MANAGER
+#define TEXUTRE_INSTANCE_MANAGER
+
 class TextureInstanceManager
 {
     private:
@@ -34,3 +37,4 @@ class TextureInstanceManager
 	}
 
 };
+#endif

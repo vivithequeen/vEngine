@@ -9,7 +9,8 @@
 #include "../instances/CubeMeshInstance.cpp"
 #include "../instances/PlaneMeshInstance.cpp"
 using namespace std;
-
+#ifndef MESH_INSTANCE_MANAGER
+#define MESH_INSTANCE_MANAGER
 class MeshInstanceManager
 {
 private:
@@ -70,3 +71,4 @@ public:
 		return 0;
 	}
 };
+#endif
