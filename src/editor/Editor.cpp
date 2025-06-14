@@ -13,21 +13,21 @@
 class Editor
 {
 private:
-
-public:
-    
     bool mouse_locked;
     
-    bool editorConfigOpen;
+    bool editorSettingsOpen;
     bool gameWindowOpen;
+public:
+    
+
     EditorCamera editorCamera;
 
     Editor()
     {
 
         mouse_locked = true;
-        editorConfigOpen = true;
-        gameWindowOpen = false;
+        editorSettingsOpen = true;
+        gameWindowOpen = true;
 
     }
 
@@ -56,21 +56,8 @@ public:
         ImGui::PushFont(myFont);
         mainMenuBar();
 
-        if(editorConfigOpen)
-        {
-            if(ImGui::Begin("Editor Config", &editorConfigOpen, ImGuiWindowFlags_MenuBar))
-            {
-
-            }
-            if (ImGui::Checkbox("lock mouse", &mouse_locked))
-            {
-            
-            };
-            ImGui::End();
-        }
-
-        
-
+    
+        editorSettingsWindow();
         gameWindow(renderTexture);
         ImGui::PopFont();
 
@@ -90,6 +77,10 @@ public:
             ImGui::EndMenu();
         }
         if(ImGui::BeginMenu("Windows")){
+
+            ImGui::MenuItem("Editor Settings", NULL, &editorSettingsOpen); // errors because it doesnt like me
+            ImGui::MenuItem("Game Window", NULL, &gameWindowOpen); // errors because it doesnt like me
+
             ImGui::EndMenu();
         }
         if(ImGui::BeginMenu("Save")){
@@ -98,22 +89,41 @@ public:
         if(ImGui::BeginMenu("Build")){
             ImGui::EndMenu();
         }
+        if(ImGui::BeginMenu("Help")){
+            ImGui::EndMenu();
+        }
 
         
         ImGui::EndMainMenuBar();
         return 0;
     }
+    int editorSettingsWindow(){
+        if(editorSettingsOpen)
+        {
+            if(ImGui::Begin("Editor Config", &editorSettingsOpen, ImGuiWindowFlags_MenuBar))
+            {
+                if (ImGui::Checkbox("lock mouse", &mouse_locked))
+                {
+                
+                };
+                ImGui::End();
+            }
 
+        }
+        return 0;
+    }
     int gameWindow(RenderTexture2D renderTexture){
+        if(gameWindowOpen)
+        {
+            //does not scale correctly, it should keep its proportions
+            ImTextureID texture = (ImTextureID)(uintptr_t)renderTexture.texture.id;
 
-        //does not scale correctly, it should keep its proportions
-        ImTextureID texture = (ImTextureID)(uintptr_t)renderTexture.texture.id;
+            ImGui::Begin("Game Window", &gameWindowOpen, ImGuiWindowFlags_MenuBar);
+            ImGui::Image(texture, ImGui::GetWindowSize(), ImVec2(0, 1), ImVec2(1, 0));
 
-        ImGui::Begin("Game Window", &gameWindowOpen, ImGuiWindowFlags_MenuBar);
-        ImGui::Image(texture, ImGui::GetWindowSize(), ImVec2(0, 1), ImVec2(1, 0));
-
-        
-        ImGui::End();
+            
+            ImGui::End();
+        }
         return 0;
     }
 };
