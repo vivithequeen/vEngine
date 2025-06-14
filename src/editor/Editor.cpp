@@ -18,6 +18,7 @@ private:
     bool editorSettingsOpen;
     bool gameWindowOpen;
     bool instanceManagerOpen;
+    bool newInstanceWindowOpen;
 
 public:
     EditorCamera editorCamera;
@@ -29,6 +30,7 @@ public:
         editorSettingsOpen = true;
         gameWindowOpen = true;
         instanceManagerOpen = true;
+        newInstanceWindowOpen = false;
     }
 
     int process(float dt)
@@ -57,7 +59,8 @@ public:
 
         editorSettingsWindow();
         gameWindow(renderTexture);
-        instanceManagerWindow();
+        instanceManagerWindow(instanceManager);
+        newInstanceWindow(instanceManager);
         ImGui::PopFont();
 
         rlImGuiEnd();
@@ -145,12 +148,23 @@ public:
         }
         return 0;
     }
-    int instanceManagerWindow()
+    int instanceManagerWindow(InstanceManager instanceManager)
     {
         if (instanceManagerOpen)
         {
 
             ImGui::Begin("Instance Manager", &instanceManagerOpen, ImGuiWindowFlags_MenuBar);
+
+            if (ImGui::BeginMenuBar())
+            {
+                if (ImGui::BeginMenu("File"))
+                {
+                    bool placeHolder = true;
+                    ImGui::MenuItem("New Instance", NULL, &newInstanceWindowOpen); 
+                    ImGui::EndMenu();
+                }
+                ImGui::EndMenuBar();
+            }
             if(ImGui::BeginTabBar("Instances")){
                 if(ImGui::BeginTabItem("Mesh")){
 
@@ -158,26 +172,30 @@ public:
 
                     //name of instance 
                     //id of instance
-                    //texture instance name and id
+                    //texture instance name and id <----
                     //3d x,y,z quards
                     //3d rotation
                     //copy
                     //delete
-                    static char name[128] = "Type Here";
-                    ImGui::SeparatorText("Mesh Instance I"); // placeholder name
-
-                    ImGui::InputText("Name of Instance", name,128);
-
-                    ImGui::SeparatorText("3D Values"); // placeholder name
                     
-                    //ImGui::LabelText("Placeholer id","");
-                    float position[3] = { 0.0f, 0.0f, 0.0f};
-                    float rotation[3] = { 0.0f, 0.0f, 0.0f};
+                    if (ImGui::CollapsingHeader("BoxMesh1")){
+                        static char name[128] = "Type Here"; //sections for ObjectInstance then MeshInstance ect
+                        ImGui::InputText("Name of Instance", name,128);
 
-                    ImGui::InputFloat3("Position", position);
-                    ImGui::InputFloat3("Rotation", rotation);
+                        ImGui::SeparatorText("3D Values"); // placeholder name
 
+                        //ImGui::LabelText("Placeholer id","");
+                        static float position[3] = { 0.0f, 0.0f, 0.0f};
+                        static float rotation[3] = { 0.0f, 0.0f, 0.0f};
+
+                        ImGui::InputFloat3("Position", position);
+                        ImGui::InputFloat3("Rotation", rotation);
+
+                        
+                        
+                    }
                     ImGui::EndTabItem();
+
                 }
                 if(ImGui::BeginTabItem("Models")){
                     ImGui::EndTabItem();
@@ -192,6 +210,42 @@ public:
 
             ImGui::End();
         }
+        return 0;
+    }
+    int newInstanceWindow(InstanceManager instanceManager){
+        if(newInstanceWindowOpen){
+            ImGui::Begin("New Instance Creator", &newInstanceWindowOpen, ImGuiWindowFlags_MenuBar);
+            ImGui::SeparatorText("VisualInstance"); // xyz rotation positon?
+            if(ImGui::TreeNode("ObjectInstance")){
+                if(ImGui::TreeNode("MeshInstance")){
+                    if(ImGui::TreeNode("PlaneMeshInstance")){
+                    
+                        ImGui::TreePop();
+                    }
+                    if(ImGui::TreeNode("CubeMeshInstance")){
+                    
+                        ImGui::TreePop();
+                    }
+                    ImGui::TreePop();
+                }
+                if(ImGui::TreeNode("ColliderInstance")){
+                    if(ImGui::TreeNode("BoxColliderInstance")){
+                    
+                        ImGui::TreePop();
+                    }
+                    if(ImGui::TreeNode("SphereColliderInstance")){
+                    
+                        ImGui::TreePop();
+                    }
+                    ImGui::TreePop();
+                }
+                ImGui::TreePop();
+            }
+
+            ImGui::End();
+        }
+
+
         return 0;
     }
 

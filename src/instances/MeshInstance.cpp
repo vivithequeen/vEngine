@@ -3,11 +3,12 @@
 #include "resource_dir.h"
 #include "raymath.h"
 #include "MaterialInstance.cpp"
+#include "ObjectInstance.cpp"
 using namespace std;
 #ifndef MESH_INSTANCE
 #define MESH_INSTANCE
 
-class MeshInstance
+class MeshInstance : public ObjectInstance
 {
 private:
 
@@ -22,8 +23,7 @@ public:
     Mesh mesh;
     BoundingBox collider;
     MaterialInstance material;
-    Vector3 position;
-    Vector3 rotation;
+
 
     MeshInstance()
     {
