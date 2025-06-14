@@ -14,7 +14,7 @@ using namespace std;
 class MeshInstanceManager
 {
 private:
-	vector<MeshInstance> meshs = {};
+	vector<MeshInstance*> meshs = {};
 
 	int currentid;
 public:
@@ -22,13 +22,13 @@ public:
 	{
 	}
 
-	int addMesh(MeshInstance meshInstance)
+	int addMesh(MeshInstance* meshInstance)
 	{
 		meshs.push_back(meshInstance);
 		return 0;
 	}
 
-	MeshInstance getMaterialByIndex(int index)
+	MeshInstance* getMeshByIndex(int index)
 	{
 		return meshs.at(index);
 	}
@@ -42,28 +42,26 @@ public:
 	int makeCubeMesh(Vector3 pos, Vector3 rot, Vector3 di, MaterialInstance mes){
 
 		CubeMeshInstance m(pos,rot,di,mes,makeId("cubemesh"));
-		addMesh(m);
+		addMesh(new CubeMeshInstance(pos,rot,di,mes,makeId("cubemesh")));
 		return 0;
 	}
 	int makePlaneMesh(Vector3 pos, Vector3 rot, Vector2 di, MaterialInstance mes){
 		PlaneMeshInstance m(pos, rot, di, mes, makeId("planemesh"));
-		addMesh(m);
+		addMesh(new PlaneMeshInstance(pos, rot, di, mes, makeId("planemesh")));
 		return 0;
 	}
 	
 	int drawMesh()
 	{
 		// meshs[0].draw();
-		for (MeshInstance mesh : meshs)
+		for (auto mesh : meshs)
 		{
-			mesh.draw();
+			mesh->draw();
 		}
 
 		return 0;
 	}
-	vector<MeshInstance> getMeshs(){
-		return meshs;
-	}
+
 	int process()
 	{
 

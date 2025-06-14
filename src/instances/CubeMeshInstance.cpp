@@ -26,7 +26,16 @@ class CubeMeshInstance: public MeshInstance
 
     int updateMesh(){
         mesh = GenMeshCube(dimentions.x, dimentions.y, dimentions.z);
-        collider = GetMeshBoundingBox(mesh);
+        colliderInstance.collider = GetMeshBoundingBox(mesh);
+        return 0;
+    }
+    int getEditorOptions() override
+    { 
+        MeshInstance::getEditorOptions();
+        ImGui::SeparatorText("CubeMeshInstance");
+        static float dimentionsEditor[3] = { dimentions.x, dimentions.y, dimentions.z};
+        
+        ImGui::InputFloat3("Dimentions", dimentionsEditor);
         return 0;
     }
 };

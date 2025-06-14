@@ -49,7 +49,7 @@ class GameWorld
 		    editor.process(GetFrameTime());
         }
         if(gameMode == GAME){
-            player.process(GetFrameTime(),instanceManager.meshInstanceManager.getMeshs());
+            //player.process(GetFrameTime(),instanceManager.meshInstanceManager.getMeshs());
         }
 		DrawGrid(17,1);
 

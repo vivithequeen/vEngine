@@ -178,21 +178,17 @@ public:
                     //copy
                     //delete
                     
-                    if (ImGui::CollapsingHeader("BoxMesh1")){
-                        static char name[128] = "Type Here"; //sections for ObjectInstance then MeshInstance ect
-                        ImGui::InputText("Name of Instance", name,128);
+                    if (ImGui::TreeNode("PlaneMesh1"))
+                    {
 
-                        ImGui::SeparatorText("3D Values"); // placeholder name
+                        instanceManager.meshInstanceManager.getMeshByIndex(0)->getEditorOptions();//CHANGE SEPERATE INSTANCE MANAGERS TO JUST BE A SINGLE INSTANGE MANAGER
+                        ImGui::TreePop();
+                    }
+                    if (ImGui::TreeNode("CubeMesh1"))
+                    {
 
-                        //ImGui::LabelText("Placeholer id","");
-                        static float position[3] = { 0.0f, 0.0f, 0.0f};
-                        static float rotation[3] = { 0.0f, 0.0f, 0.0f};
-
-                        ImGui::InputFloat3("Position", position);
-                        ImGui::InputFloat3("Rotation", rotation);
-
-                        
-                        
+                        instanceManager.meshInstanceManager.getMeshByIndex(1)->getEditorOptions();//CHANGE SEPERATE INSTANCE MANAGERS TO JUST BE A SINGLE INSTANGE MANAGER
+                        ImGui::TreePop();
                     }
                     ImGui::EndTabItem();
 
@@ -216,7 +212,7 @@ public:
         if(newInstanceWindowOpen){
             ImGui::Begin("New Instance Creator", &newInstanceWindowOpen, ImGuiWindowFlags_MenuBar);
             ImGui::SeparatorText("VisualInstance"); // xyz rotation positon?
-            if(ImGui::TreeNode("ObjectInstance")){
+            if(ImGui::TreeNode("TransformInstance")){
                 if(ImGui::TreeNode("MeshInstance")){
                     if(ImGui::TreeNode("PlaneMeshInstance")){
                     

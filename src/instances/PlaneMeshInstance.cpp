@@ -24,7 +24,16 @@ class PlaneMeshInstance : public MeshInstance{
     }
     int updateMesh(){
         mesh = GenMeshPlane(dimentions.x, dimentions.y, 1, 1);
-        collider = GetMeshBoundingBox(mesh);
+        colliderInstance.collider = GetMeshBoundingBox(mesh);
+        return 0;
+    }
+    int getEditorOptions() override
+    {
+        MeshInstance::getEditorOptions();
+        ImGui::SeparatorText("PlaneMeshInstance");
+        static float dimentionsEditor[2] = { dimentions.x, dimentions.y};
+        
+        ImGui::InputFloat2("Dimentions", dimentionsEditor);
         return 0;
     }
 };

@@ -3,27 +3,24 @@
 #include "resource_dir.h"
 #include "raymath.h"
 #include "MaterialInstance.cpp"
-#include "ObjectInstance.cpp"
+#include "TransformInstance.cpp"
+#include "ColliderInstance.cpp"
 using namespace std;
 #ifndef MESH_INSTANCE
 #define MESH_INSTANCE
 
-class MeshInstance : public ObjectInstance
+class MeshInstance : public TransformInstance
 {
 private:
 
-    Matrix matrix;
-
-
-    bool doesCollition = true;
-    bool debug = true;
+    
 
 public:
     string id;
     Mesh mesh;
-    BoundingBox collider;
+    
     MaterialInstance material;
-
+    ColliderInstance colliderInstance;
 
     MeshInstance()
     {
@@ -35,14 +32,14 @@ public:
         matrix = MatrixMultiply(MatrixRotate(rotation, 1), MatrixTranslate(position.x, position.y, position.z)); // rotation DOES NOT WORK!
 
         Vector3 corners[8] = {
-            {collider.min.x, collider.min.y, collider.min.z},
-            {collider.min.x, collider.min.y, collider.max.z},
-            {collider.min.x, collider.max.y, collider.min.z},
-            {collider.min.x, collider.max.y, collider.max.z},
-            {collider.max.x, collider.min.y, collider.min.z},
-            {collider.max.x, collider.min.y, collider.max.z},
-            {collider.max.x, collider.max.y, collider.min.z},
-            {collider.max.x, collider.max.y, collider.max.z}};
+            {colliderInstance.collider.min.x, colliderInstance.collider.min.y, colliderInstance.collider.min.z},
+            {colliderInstance.collider.min.x, colliderInstance.collider.min.y, colliderInstance.collider.max.z},
+            {colliderInstance.collider.min.x, colliderInstance.collider.max.y, colliderInstance.collider.min.z},
+            {colliderInstance.collider.min.x, colliderInstance.collider.max.y, colliderInstance.collider.max.z},
+            {colliderInstance.collider.max.x, colliderInstance.collider.min.y, colliderInstance.collider.min.z},
+            {colliderInstance.collider.max.x, colliderInstance.collider.min.y, colliderInstance.collider.max.z},
+            {colliderInstance.collider.max.x, colliderInstance.collider.max.y, colliderInstance.collider.min.z},
+            {colliderInstance.collider.max.x, colliderInstance.collider.max.y, colliderInstance.collider.max.z}};
 
         // Transform all corners
         for (int i = 0; i < 8; i++)
@@ -70,10 +67,25 @@ public:
 
         BoundingBox transformedBox = getTransformedBox();
         DrawMesh(mesh, material.getMaterial(), matrix);
-        if (debug)
+        if (colliderInstance.debugVisible)
         {
             DrawBoundingBox(transformedBox, RED);
         }
+    }
+    int getEditorOptions() override
+    {
+        TransformInstance::getEditorOptions();
+        ImGui::SeparatorText("MeshInstance");
+        
+        if(ImGui::CollapsingHeader("ColliderInstance"))
+        {
+            colliderInstance.getEditorOptions();
+        }
+        if(ImGui::CollapsingHeader("MaterialInstance"))
+        {
+            
+        }        
+        return 0;
     }
 };
 #endif

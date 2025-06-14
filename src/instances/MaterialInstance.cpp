@@ -4,18 +4,18 @@
 #include "resource_dir.h"
 #include "raymath.h"
 #include <cstring>
-
+#include "Instance.cpp"
 #ifndef MATERIAL_INSTANCE
 #define MATERIAL_INSTANCE
 
 using namespace std;
 
-class MaterialInstance
+class MaterialInstance : public Instance
 {
 private:
     Material material;
     //Texture materialTexture;
-    string id;
+
 
 public:
     MaterialInstance()
