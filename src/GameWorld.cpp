@@ -61,7 +61,7 @@ class GameWorld
     }
 
     int draw2D(RenderTexture2D renderTexture){
-        DrawFPS(0,0);
+        //DrawFPS(0,0);
 
         editor.draw2D(renderTexture);
 
