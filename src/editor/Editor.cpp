@@ -14,12 +14,12 @@ class Editor
 {
 private:
     bool mouse_locked;
-    
+
     bool editorSettingsOpen;
     bool gameWindowOpen;
-public:
-    
+    bool instanceManagerOpen;
 
+public:
     EditorCamera editorCamera;
 
     Editor()
@@ -28,7 +28,7 @@ public:
         mouse_locked = true;
         editorSettingsOpen = true;
         gameWindowOpen = true;
-
+        instanceManagerOpen = true;
     }
 
     int process(float dt)
@@ -50,13 +50,11 @@ public:
 
         ImGuiIO &io = ImGui::GetIO();
 
-
         ImFont *myFont = io.Fonts->Fonts[1];
 
         ImGui::PushFont(myFont);
         mainMenuBar();
 
-    
         editorSettingsWindow();
         gameWindow(renderTexture);
         ImGui::PopFont();
@@ -65,63 +63,124 @@ public:
         return 0;
     }
 
-    int mainMenuBar(){
+    int mainMenuBar()
+    {
         ImGui::BeginMainMenuBar();
-        if(ImGui::BeginMenu("File")){
+        if (ImGui::BeginMenu("File"))
+        {
             ImGui::EndMenu();
         }
-        if(ImGui::BeginMenu("Edit")){
+        if (ImGui::BeginMenu("Edit"))
+        {
             ImGui::EndMenu();
         }
-        if(ImGui::BeginMenu("Settings")){
+        if (ImGui::BeginMenu("Settings"))
+        {
             ImGui::EndMenu();
         }
-        if(ImGui::BeginMenu("Windows")){
+        if (ImGui::BeginMenu("Windows"))
+        {
 
             ImGui::MenuItem("Editor Settings", NULL, &editorSettingsOpen); // errors because it doesnt like me
-            ImGui::MenuItem("Game Window", NULL, &gameWindowOpen); // errors because it doesnt like me
+            ImGui::MenuItem("Game Window", NULL, &gameWindowOpen);         // errors because it doesnt like me
 
             ImGui::EndMenu();
         }
-        if(ImGui::BeginMenu("Save")){
+        if (ImGui::BeginMenu("Save"))
+        {
             ImGui::EndMenu();
         }
-        if(ImGui::BeginMenu("Build")){
+        if (ImGui::BeginMenu("Build"))
+        {
             ImGui::EndMenu();
         }
-        if(ImGui::BeginMenu("Help")){
+        if (ImGui::BeginMenu("Help"))
+        {
             ImGui::EndMenu();
         }
 
-        
         ImGui::EndMainMenuBar();
         return 0;
     }
-    int editorSettingsWindow(){
-        if(editorSettingsOpen)
+    int editorSettingsWindow()
+    {
+
+        // cosmetic settings
+        // size?
+
+        if (editorSettingsOpen)
         {
-            if(ImGui::Begin("Editor Config", &editorSettingsOpen, ImGuiWindowFlags_MenuBar))
+            if (ImGui::Begin("Editor Config", &editorSettingsOpen, ImGuiWindowFlags_MenuBar))
             {
                 if (ImGui::Checkbox("lock mouse", &mouse_locked))
                 {
-                
                 };
                 ImGui::End();
             }
-
         }
         return 0;
     }
-    int gameWindow(RenderTexture2D renderTexture){
-        if(gameWindowOpen)
+    int gameWindow(RenderTexture2D renderTexture)
+    {
+        if (gameWindowOpen)
         {
-            //does not scale correctly, it should keep its proportions
+            // does not scale correctly, it should keep its proportions
             ImTextureID texture = (ImTextureID)(uintptr_t)renderTexture.texture.id;
 
             ImGui::Begin("Game Window", &gameWindowOpen, ImGuiWindowFlags_MenuBar);
+
+            if (ImGui::BeginMenuBar())
+            {
+                if (ImGui::BeginMenu("File"))
+                {
+                    ImGui::EndMenu();
+                }
+                ImGui::EndMenuBar();
+            }
+
             ImGui::Image(texture, ImGui::GetWindowSize(), ImVec2(0, 1), ImVec2(1, 0));
 
-            
+            ImGui::End();
+        }
+        return 0;
+    }
+    int instanceManager()
+    {
+        if (instanceManagerOpen)
+        {
+            // does not scale correctly, it should keep its proportions
+
+
+            ImGui::Begin("Instance Manager", &instanceManagerOpen, ImGuiWindowFlags_MenuBar);
+
+
+
+
+            ImGui::End();
+        }
+        return 0;
+    }
+    int gameWindow(RenderTexture2D renderTexture)
+    {
+        if (gameWindowOpen)
+        {
+
+            // does not scale correctly, it should keep its proportions
+            ImTextureID texture = (ImTextureID)(uintptr_t)renderTexture.texture.id;
+
+            ImGui::Begin("Game Window", &gameWindowOpen, ImGuiWindowFlags_MenuBar);
+
+            if (ImGui::BeginMenuBar())
+            {
+                if (ImGui::BeginMenu("File"))
+                {
+                    ImGui::EndMenu();
+                }
+                ImGui::EndMenuBar();
+            }
+
+            ImGui::Image(texture, ImGui::GetWindowSize(), ImVec2(0, 1), ImVec2(1, 0));
+
             ImGui::End();
         }
         return 0;
