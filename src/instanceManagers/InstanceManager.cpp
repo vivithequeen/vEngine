@@ -7,7 +7,7 @@
 
 #include "MeshInstanceManager.cpp"
 #include "MaterialInstanceManager.cpp"
-#include "TextureInstanceManager.cpp"
+
 
 
 #ifndef INSTANCE_MANAGER
@@ -20,14 +20,14 @@ class InstanceManager
 public:
     MeshInstanceManager meshInstanceManager;
     MaterialInstanceManager materialInstanceManager;
-    TextureInstanceManager textureInstanceManager;
+
     //PlayerInstance player;
     InstanceManager()
     {
 
         // testing!!!!
-        textureInstanceManager.addTextureFromPath("testMeow.png");
-        materialInstanceManager.addMaterial(MaterialInstance(textureInstanceManager.getTextureByIndex(0)));
+
+        materialInstanceManager.addMaterial(MaterialInstance("testMeow.png"));
         meshInstanceManager.makeCubeMesh((Vector3){0, 2, 0}, (Vector3){0, 0, 0}, (Vector3){3, 3, 3}, materialInstanceManager.getMaterialByIndex(0));
         meshInstanceManager.makePlaneMesh((Vector3){0, 0, 0}, (Vector3){0, 0, 0}, (Vector2){2, 2}, materialInstanceManager.getMaterialByIndex(0));
     }

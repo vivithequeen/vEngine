@@ -14,8 +14,8 @@ class MaterialInstance : public Instance
 {
 private:
     Material material;
-    //Texture materialTexture;
-
+    Texture materialTexture;
+    string filepath;
 
 public:
     MaterialInstance()
@@ -23,19 +23,31 @@ public:
         material = LoadMaterialDefault();
     }
 
-    MaterialInstance(Texture texture/*, string id*/)
+    MaterialInstance(string initfilepath/*, string id*/)
     {
         Material m = LoadMaterialDefault();
+        this->filepath = initfilepath;
+        
+        char f[filepath.length() + 1];
+        strcpy(f, filepath.c_str());
+        materialTexture = LoadTexture(f);
 
 
-        //materialTexture = texture;
-        SetMaterialTexture(&m, MATERIAL_MAP_DIFFUSE, texture);
+        SetMaterialTexture(&m, MATERIAL_MAP_DIFFUSE, materialTexture);
         //this->id = id;
+        this->name = "MaterialInstance";
         this->material = m;
     }
     int getEditorOptions() override
     {
         Instance::getEditorOptions();
+        ImGui::SeparatorText("Material Instance");
+        
+
+        rlImGuiImage(&materialTexture);
+        ImGui::Text("Texture Resolution: %d x %d", materialTexture.width,materialTexture.height);
+        ImGui::Text("Texture Filepath: %s", filepath.c_str());
+
         //do stuff here
         return 0;
     }

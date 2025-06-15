@@ -81,13 +81,16 @@ public:
         TransformInstance::getEditorOptions();
         ImGui::SeparatorText("MeshInstance");
         
-        if(ImGui::CollapsingHeader("ColliderInstance"))
+        
+        if(ImGui::TreeNode("ColliderInstance"))
         {
             colliderInstance.getEditorOptions();
+            ImGui::TreePop();
         }
-        if(ImGui::CollapsingHeader("MaterialInstance"))
+        if(ImGui::TreeNode("MaterialInstance"))
         {
-            
+            material.getEditorOptions();
+            ImGui::TreePop();
         }        
         return 0;
     }
