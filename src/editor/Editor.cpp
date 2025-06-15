@@ -9,6 +9,7 @@
 #include "rlImGui.h"
 #include "../instanceManagers/InstanceManager.cpp"
 #include "EditorCamera.cpp"
+#include "EditorConsole.cpp"
 
 class Editor
 {
@@ -22,6 +23,8 @@ private:
     bool instanceInspectorOpen;
 
     bool isEditorCameraActive;
+
+    EditorConsole console;
     Instance *currentInstanceInspectorInstance;
 
 public:
@@ -37,6 +40,8 @@ public:
         newInstanceWindowOpen = false;
         instanceInspectorOpen = false;
         isEditorCameraActive = false;
+
+        console = EditorConsole();
     }
 
     int process(float dt)
@@ -68,6 +73,7 @@ public:
         instanceManagerWindow(instanceManager);
         newInstanceWindow(instanceManager);
         instanceInspectorWindow();
+        console.drawConsole();
 
 
 
@@ -81,6 +87,14 @@ public:
         ImGui::BeginMainMenuBar();
         if (ImGui::BeginMenu("File"))
         {
+            ImGui::MenuItem("New");
+            ImGui::MenuItem("Open");
+            if(ImGui::BeginMenu("Recents"))
+            {
+                ImGui::MenuItem("Bleep bla");
+                ImGui::MenuItem("beep beep");
+                ImGui::EndMenu();
+            }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Edit"))
@@ -93,10 +107,12 @@ public:
         }
         if (ImGui::BeginMenu("Windows"))
         {
-
+            ImGui::SeparatorText("Editor");
             ImGui::MenuItem("Editor Settings", NULL, &editorSettingsOpen); 
             ImGui::MenuItem("Game Window", NULL, &gameWindowOpen);         
             ImGui::MenuItem("Instance Manager", NULL, &instanceManagerOpen);
+            ImGui::SeparatorText("Debug");
+            ImGui::MenuItem("Console", NULL, &console.editorConsoleOpen);
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Save"))
@@ -151,9 +167,13 @@ public:
                 ImGui::EndMenuBar();
             }
             if(ImGui::IsMouseHoveringRect(ImGui::GetWindowPos(),ImGui::GetWindowSize()) && ImGui::IsMouseDown(ImGuiMouseButton_Right)){//freecam mode
+                //HideCursor();
+                //DisableCursor();
                 isEditorCameraActive = true;
             }
             else{
+                //ShowCursor();
+                //EnableCursor();
                 isEditorCameraActive = false;
             }
 
@@ -213,32 +233,34 @@ public:
         if(newInstanceWindowOpen){
             ImGui::Begin("New Instance Creator", &newInstanceWindowOpen, ImGuiWindowFlags_MenuBar);
             ImGui::SeparatorText("VisualInstance"); // xyz rotation positon?
-            if(ImGui::TreeNode("TransformInstance")){
-                if(ImGui::TreeNode("MeshInstance")){
-                    if(ImGui::TreeNode("PlaneMeshInstance")){
-                    
+            if(ImGui::TreeNode("Instance")){
+                if(ImGui::TreeNode("TransformInstance")){
+                    if(ImGui::TreeNode("MeshInstance")){
+                        if(ImGui::TreeNode("PlaneMeshInstance")){
+                        
+                            ImGui::TreePop();
+                        }
+                        if(ImGui::TreeNode("CubeMeshInstance")){
+                        
+                            ImGui::TreePop();
+                        }
                         ImGui::TreePop();
                     }
-                    if(ImGui::TreeNode("CubeMeshInstance")){
-                    
-                        ImGui::TreePop();
-                    }
-                    ImGui::TreePop();
-                }
-                if(ImGui::TreeNode("ColliderInstance")){
-                    if(ImGui::TreeNode("BoxColliderInstance")){
-                    
-                        ImGui::TreePop();
-                    }
-                    if(ImGui::TreeNode("SphereColliderInstance")){
-                    
+                    if(ImGui::TreeNode("ColliderInstance")){
+                        if(ImGui::TreeNode("BoxColliderInstance")){
+                        
+                            ImGui::TreePop();
+                        }
+                        if(ImGui::TreeNode("SphereColliderInstance")){
+                        
+                            ImGui::TreePop();
+                        }
                         ImGui::TreePop();
                     }
                     ImGui::TreePop();
                 }
                 ImGui::TreePop();
             }
-
             ImGui::End();
         }
 
