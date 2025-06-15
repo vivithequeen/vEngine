@@ -29,7 +29,7 @@ public:
 
     BoundingBox getTransformedBox()
     {
-        matrix = MatrixMultiply(MatrixRotate(rotation, 1), MatrixTranslate(position.x, position.y, position.z)); // rotation DOES NOT WORK!
+        matrix = MatrixMultiply(MatrixRotateXYZ(rotation), MatrixTranslate(position.x, position.y, position.z)); // rotation DOES NOT WORK!
 
         Vector3 corners[8] = {
             {colliderInstance.collider.min.x, colliderInstance.collider.min.y, colliderInstance.collider.min.z},
@@ -64,9 +64,13 @@ public:
 
     void draw()
     {
-
         BoundingBox transformedBox = getTransformedBox();
-        DrawMesh(mesh, material.getMaterial(), matrix);
+        if(visible)
+        {
+            
+            DrawMesh(mesh, material.getMaterial(), matrix);
+
+        }
         if (colliderInstance.debugVisible)
         {
             DrawBoundingBox(transformedBox, RED);

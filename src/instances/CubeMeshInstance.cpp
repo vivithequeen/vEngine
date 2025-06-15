@@ -35,7 +35,30 @@ class CubeMeshInstance: public MeshInstance
         ImGui::SeparatorText("CubeMeshInstance");
         static float dimentionsEditor[3] = { dimentions.x, dimentions.y, dimentions.z};
         
+
+        if(ImGui::Button("Reset",ImVec2(50,20)))
+        {
+            dimentionsEditor[0] = 1;
+            dimentionsEditor[1] = 1;
+            dimentionsEditor[2] = 1;
+
+        }
+
+
+        ImGui::SameLine();
         ImGui::InputFloat3("Dimentions", dimentionsEditor);
+
+        
+        if(dimentions.x != dimentionsEditor[0] || dimentions.y != dimentionsEditor[1] ||dimentions.z != dimentionsEditor[2]){
+            dimentions.x = dimentionsEditor[0];
+            dimentions.y = dimentionsEditor[1];
+            dimentions.z = dimentionsEditor[2];
+            updateMesh();
+        }
+
+
+
+        
         return 0;
     }
 };

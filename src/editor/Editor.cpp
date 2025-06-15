@@ -9,7 +9,7 @@
 #include "rlImGui.h"
 #include "../instanceManagers/InstanceManager.cpp"
 #include "EditorCamera.cpp"
-#include "EditorInstanceWindow.cpp"
+
 class Editor
 {
 private:
@@ -19,10 +19,14 @@ private:
     bool gameWindowOpen;
     bool instanceManagerOpen;
     bool newInstanceWindowOpen;
+    bool instanceInspectorOpen;
+
+    bool isEditorCameraActive;
+    Instance *currentInstanceInspectorInstance;
 
 public:
     EditorCamera editorCamera;
-    vector<EditorInstanceWindow> editorInstanceWindows = {};
+
     Editor()
     {
 
@@ -31,11 +35,13 @@ public:
         gameWindowOpen = true;
         instanceManagerOpen = true;
         newInstanceWindowOpen = false;
+        instanceInspectorOpen = false;
+        isEditorCameraActive = false;
     }
 
     int process(float dt)
     {
-        editorCamera.process(dt);
+        editorCamera.process(dt, isEditorCameraActive);
         return 0;
     }
 
@@ -61,17 +67,10 @@ public:
         gameWindow(renderTexture);
         instanceManagerWindow(instanceManager);
         newInstanceWindow(instanceManager);
-        
+        instanceInspectorWindow();
 
 
 
-        for(int i = 0; i < editorInstanceWindows.size();i++){
-            if(editorInstanceWindows.at(i).open == false){
-                editorInstanceWindows.erase(editorInstanceWindows.begin() + i);
-                return 0;
-            }
-            editorInstanceWindows.at(i).showWindow();
-        }
         ImGui::PopFont();
         rlImGuiEnd();
         return 0;
@@ -151,9 +150,15 @@ public:
                 }
                 ImGui::EndMenuBar();
             }
+            if(ImGui::IsMouseHoveringRect(ImGui::GetWindowPos(),ImGui::GetWindowSize()) && ImGui::IsMouseDown(ImGuiMouseButton_Right)){//freecam mode
+                isEditorCameraActive = true;
+            }
+            else{
+                isEditorCameraActive = false;
+            }
 
-            ImGui::Image(texture, ImGui::GetWindowSize(), ImVec2(0, 1), ImVec2(1, 0));
-
+            ImGui::Image(texture, ImVec2(ImGui::GetWindowSize().x,ImGui::GetWindowSize().x*9.0/16), ImVec2(0, 1), ImVec2(1, 0));
+          
             ImGui::End();
         }
         return 0;
@@ -169,10 +174,8 @@ public:
             {
                 if (ImGui::BeginMenu("File"))
                 {
-                    bool placeHolder = true;
-                    if(ImGui::MenuItem("New Instance")){
-                        editorInstanceWindows.push_back(EditorInstanceWindow());
-                    } 
+                    ImGui::MenuItem("New Instance",NULL,&newInstanceWindowOpen);
+
                     ImGui::EndMenu();
                 }
                 ImGui::EndMenuBar();
@@ -183,12 +186,12 @@ public:
                     for(MeshInstance* m : instanceManager.meshInstanceManager.meshs){
                         ImGui::PushID(index);
                         if(ImGui::MenuItem(m->getNameAsChar())){
-                            editorInstanceWindows.push_back(EditorInstanceWindow(m));
+                            currentInstanceInspectorInstance = m;
+                            instanceInspectorOpen = true;
                         }
                         ImGui::PopID();
                         index++;
                     }
-                    
                     ImGui::EndTabItem();
                 }
                 if(ImGui::BeginTabItem("Models")){
@@ -242,5 +245,18 @@ public:
 
         return 0;
     }
+
+    int instanceInspectorWindow()
+    {
+        if(instanceInspectorOpen)
+        {
+            ImGui::Begin(currentInstanceInspectorInstance->getNameAsChar(), &instanceInspectorOpen, ImGuiWindowFlags_MenuBar); // add name functionality
+            currentInstanceInspectorInstance->getEditorOptions();//CHANGE SEPERATE INSTANCE MANAGERS TO JUST BE A SINGLE INSTANGE MANAGER
+            ImGui::End();
+            
+        }
+        return 0;
+    }
+
 
 };

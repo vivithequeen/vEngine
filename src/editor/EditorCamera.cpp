@@ -20,8 +20,11 @@ class EditorCamera{
         camera.projection = CAMERA_PERSPECTIVE;
     }
 
-    int process(float dt){
-        UpdateCamera(&camera, CAMERA_FREE);
+    int process(float dt, bool move){
+        if(move)
+        {
+            UpdateCamera(&camera, CAMERA_FREE);
+        }
         return 0;
     }
 };
