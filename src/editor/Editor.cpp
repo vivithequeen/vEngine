@@ -203,7 +203,7 @@ public:
             if(ImGui::BeginTabBar("Instances")){
                 if(ImGui::BeginTabItem("Mesh")){
                     int index;
-                    for(MeshInstance* m : instanceManager.meshInstanceManager.meshs){
+                    for(MeshInstance* m : instanceManager.meshInstanceManager.meshs){//change to getMeshVector()->vector<MeshInstance>
                         ImGui::PushID(index);
                         if(ImGui::MenuItem(m->getNameAsChar())){
                             currentInstanceInspectorInstance = m;

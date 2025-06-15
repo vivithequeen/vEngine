@@ -62,7 +62,7 @@ public:
         return getTransformedBox();
     }
 
-    void draw()
+    void process()
     {
         BoundingBox transformedBox = getTransformedBox();
         if(visible)

@@ -57,7 +57,7 @@ public:
 		// meshs[0].draw();
 		for (auto mesh : meshs)
 		{
-			mesh->draw();
+			mesh->process();
 		}
 
 		return 0;

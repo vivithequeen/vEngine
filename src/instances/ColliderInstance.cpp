@@ -18,8 +18,9 @@ class ColliderInstance : public TransformInstance
         doesCollition = true; 
         debugVisible = true; 
     }
-    int getEditorOptions()
+    int getEditorOptions() override
     {
+        TransformInstance::getEditorOptions();
         ImGui::Checkbox("Does Collition", &doesCollition);
         ImGui::Checkbox("Debug Visible", &debugVisible);
         return 0;

@@ -33,6 +33,12 @@ public:
         //this->id = id;
         this->material = m;
     }
+    int getEditorOptions() override
+    {
+        Instance::getEditorOptions();
+        //do stuff here
+        return 0;
+    }
     Material getMaterial()
     {
         return material;
