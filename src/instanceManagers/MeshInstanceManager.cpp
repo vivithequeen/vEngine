@@ -14,10 +14,11 @@ using namespace std;
 class MeshInstanceManager
 {
 private:
-	vector<MeshInstance*> meshs = {};
+	
 
 	int currentid;
 public:
+	vector<MeshInstance*> meshs = {};
 	MeshInstanceManager()
 	{
 	}

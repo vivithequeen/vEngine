@@ -9,7 +9,7 @@
 #include "rlImGui.h"
 #include "../instanceManagers/InstanceManager.cpp"
 #include "EditorCamera.cpp"
-
+#include "EditorInstanceWindow.cpp"
 class Editor
 {
 private:
@@ -22,7 +22,7 @@ private:
 
 public:
     EditorCamera editorCamera;
-
+    vector<EditorInstanceWindow> editorInstanceWindows = {};
     Editor()
     {
 
@@ -61,8 +61,18 @@ public:
         gameWindow(renderTexture);
         instanceManagerWindow(instanceManager);
         newInstanceWindow(instanceManager);
-        ImGui::PopFont();
+        
 
+
+
+        for(int i = 0; i < editorInstanceWindows.size();i++){
+            if(editorInstanceWindows.at(i).open == false){
+                editorInstanceWindows.erase(editorInstanceWindows.begin() + i);
+                return 0;
+            }
+            editorInstanceWindows.at(i).showWindow();
+        }
+        ImGui::PopFont();
         rlImGuiEnd();
         return 0;
     }
@@ -160,38 +170,26 @@ public:
                 if (ImGui::BeginMenu("File"))
                 {
                     bool placeHolder = true;
-                    ImGui::MenuItem("New Instance", NULL, &newInstanceWindowOpen); 
+                    if(ImGui::MenuItem("New Instance")){
+                        editorInstanceWindows.push_back(EditorInstanceWindow());
+                    } 
                     ImGui::EndMenu();
                 }
                 ImGui::EndMenuBar();
             }
             if(ImGui::BeginTabBar("Instances")){
                 if(ImGui::BeginTabItem("Mesh")){
-
-                    //for each intance
-
-                    //name of instance 
-                    //id of instance
-                    //texture instance name and id <----
-                    //3d x,y,z quards
-                    //3d rotation
-                    //copy
-                    //delete
+                    int index;
+                    for(MeshInstance* m : instanceManager.meshInstanceManager.meshs){
+                        ImGui::PushID(index);
+                        if(ImGui::MenuItem(m->getNameAsChar())){
+                            editorInstanceWindows.push_back(EditorInstanceWindow(m));
+                        }
+                        ImGui::PopID();
+                        index++;
+                    }
                     
-                    if (ImGui::TreeNode("PlaneMesh1"))
-                    {
-
-                        instanceManager.meshInstanceManager.getMeshByIndex(0)->getEditorOptions();//CHANGE SEPERATE INSTANCE MANAGERS TO JUST BE A SINGLE INSTANGE MANAGER
-                        ImGui::TreePop();
-                    }
-                    if (ImGui::TreeNode("CubeMesh1"))
-                    {
-
-                        instanceManager.meshInstanceManager.getMeshByIndex(1)->getEditorOptions();//CHANGE SEPERATE INSTANCE MANAGERS TO JUST BE A SINGLE INSTANGE MANAGER
-                        ImGui::TreePop();
-                    }
                     ImGui::EndTabItem();
-
                 }
                 if(ImGui::BeginTabItem("Models")){
                     ImGui::EndTabItem();

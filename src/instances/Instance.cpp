@@ -5,6 +5,7 @@
 #include "imgui.h"
 #include "rlImGui.h"
 
+#include <string>
 using namespace std;
 #ifndef INSTANCE
 #define INSTANCE
@@ -18,7 +19,9 @@ class Instance
     {
         name = "no name";
     }
-
+    const char* getNameAsChar() {
+        return name.c_str();
+    }
     virtual int getEditorOptions(){
         ImGui::SeparatorText("Instance");
         //static char placeHolder[128] = "Type Here"; //sections for ObjectInstance then MeshInstance ect

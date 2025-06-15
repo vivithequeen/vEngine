@@ -20,7 +20,7 @@ class CubeMeshInstance: public MeshInstance
         this->material = mes;
         this-> dimentions = di;
         this->id = mId;
-
+        this->name = "CubeMeshInstance";
         updateMesh();
     }
 
