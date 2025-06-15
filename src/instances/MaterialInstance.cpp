@@ -28,9 +28,8 @@ public:
         Material m = LoadMaterialDefault();
         this->filepath = initfilepath;
         
-        char f[filepath.length() + 1];
-        strcpy(f, filepath.c_str());
-        materialTexture = LoadTexture(f);
+
+        materialTexture = LoadTexture(filepath.c_str());
 
 
         SetMaterialTexture(&m, MATERIAL_MAP_DIFFUSE, materialTexture);
@@ -38,19 +37,42 @@ public:
         this->name = "MaterialInstance";
         this->material = m;
     }
+    int updateTexture()
+    {
+
+
+        materialTexture = LoadTexture(filepath.c_str());
+
+
+        SetMaterialTexture(&material, MATERIAL_MAP_DIFFUSE, materialTexture);
+
+        return 0;
+    }
     int getEditorOptions() override
     {
         Instance::getEditorOptions();
         ImGui::SeparatorText("Material Instance");
         
 
-        rlImGuiImage(&materialTexture);
+        rlImGuiImageSize(&materialTexture,100,100);
         ImGui::Text("Texture Resolution: %d x %d", materialTexture.width,materialTexture.height);
         ImGui::Text("Texture Filepath: %s", filepath.c_str());
-
+        ImGui::Button("Upload Image");
+        if(ImGui::BeginDragDropTarget()){
+            if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("FILEPATH")){
+                std::string newFilePath((const char*)payload->Data, payload->DataSize - 1); 
+                newFilePath = newFilePath.substr(13);
+                if(newFilePath.substr(newFilePath.size()-3,newFilePath.size()) == "png")
+                {
+                    filepath = newFilePath;
+                }
+                updateTexture();
+            }
+        }
         //do stuff here
         return 0;
     }
+
     Material getMaterial()
     {
         return material;
