@@ -17,6 +17,19 @@ class ModelInstance : public TransformInstance
     ColliderInstance colliderInstance;
     MaterialInstance material;
     string filepath;
+
+    ModelInstance(){
+        this->position = (Vector3){0,0,0};
+        this->rotation = (Vector3){0,0,0};
+        this->material = MaterialInstance();
+
+
+        this->name = "ModelInstance";
+        this->type = "ModelInstance";
+
+        //model = LoadModel("bomb.glb");
+    }
+
     ModelInstance(Vector3 pos, Vector3 rot){
         this->position = pos;
         this->rotation = rot;
@@ -25,8 +38,7 @@ class ModelInstance : public TransformInstance
 
         this->name = "ModelInstance";
         this->type = "ModelInstance";
-        model = LoadModelFromMesh(GenMeshCube(1,1,1));
-        model.materials[0]=material.getMaterial();
+
         //model = LoadModel("bomb.glb");
     }
     BoundingBox getTransformedBox()
@@ -62,7 +74,7 @@ class ModelInstance : public TransformInstance
     int process(EditorCamera editorCamera) override
     {
         BoundingBox transformedBox = getTransformedBox();
-        //model.transform = matrix;
+        model.transform = matrix;
         DrawModel(model,Vector3Zero(),1.0f,WHITE);
         return 0;
     }

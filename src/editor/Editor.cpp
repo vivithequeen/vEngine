@@ -58,7 +58,7 @@ public:
         return 0;
     }
 
-    int draw2D(RenderTexture2D renderTexture, InstanceManager instanceManager)
+    int draw2D(RenderTexture2D renderTexture, InstanceManager *instanceManager)
     {
         filePaths = getFilePaths("../resources");
         rlImGuiBegin();
@@ -244,7 +244,7 @@ public:
         }
         return 0;
     }
-    int instanceManagerWindow(InstanceManager instanceManager)
+    int instanceManagerWindow(InstanceManager *instanceManager)
     {
         if (instanceManagerOpen)
         {
@@ -266,7 +266,7 @@ public:
                 if (ImGui::BeginTabItem("Mesh"))
                 {
                     int index;
-                    for (auto *m : instanceManager.instances)
+                    for (auto *m : instanceManager->instances)
                     { // change to getMeshVector()->vector<MeshInstance>
                         ImGui::PushID(index);
                         if (ImGui::MenuItem(m->getNameAsChar()))
@@ -291,7 +291,7 @@ public:
         }
         return 0;
     }
-    int newInstanceWindow(InstanceManager instanceManager)
+    int newInstanceWindow(InstanceManager *instanceManager)
     {
         if (newInstanceWindowOpen)
         {
@@ -304,26 +304,29 @@ public:
                 {
                     if (ImGui::TreeNode("MeshInstance"))
                     {
-                        if (ImGui::TreeNodeEx("PlaneMeshInstance",node_flags))
+                        if (ImGui::Button("PlaneMeshInstance"))
                         {
-
+                            instanceManager->instances.push_back(new PlaneMeshInstance());
                             
                         }
-                        if (ImGui::TreeNodeEx("CubeMeshInstance",node_flags))
+                        if (ImGui::Button("CubeMeshInstance"))
                         {
-
-                            
+                            instanceManager->instances.push_back(new CubeMeshInstance());
                         }
                         ImGui::TreePop();
                     }
+                    if (ImGui::Button("ModelInstance"))
+                    {
+                        instanceManager->instances.push_back(new ModelInstance());
+                    }
                     if (ImGui::TreeNode("ColliderInstance"))
                     {
-                        if (ImGui::TreeNodeEx("BoxColliderInstance"),node_flags)
+                        if (ImGui::Button("BoxColliderInstance"))
                         {
 
                             
                         }
-                        if (ImGui::TreeNodeEx("SphereColliderInstance"),node_flags)
+                        if (ImGui::Button("SphereColliderInstance"))
                         {
 
                             
@@ -344,7 +347,7 @@ public:
     {
         if (instanceInspectorOpen)
         {
-            ImGui::Begin(currentInstanceInspectorInstance->getNameAsChar(), &instanceInspectorOpen, ImGuiWindowFlags_MenuBar); // add name functionality
+            ImGui::Begin("Instance Inspector", &instanceInspectorOpen, ImGuiWindowFlags_MenuBar); // add name functionality
             currentInstanceInspectorInstance->getEditorOptions();                                                              // CHANGE SEPERATE INSTANCE MANAGERS TO JUST BE A SINGLE INSTANGE MANAGER
             ImGui::End();
         }

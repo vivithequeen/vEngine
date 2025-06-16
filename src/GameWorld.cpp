@@ -20,15 +20,16 @@ class GameWorld
 {
     private:
         
-    public:
+    public: 
         int gameMode;
-    	InstanceManager instanceManager;
+    	InstanceManager* instanceManager;
     	Editor editor;
         PlayerInstance player;
         
     GameWorld()
     {
         gameMode = EDIT;
+        instanceManager = new InstanceManager;
     }
 
 
@@ -53,7 +54,7 @@ class GameWorld
         }
 		DrawGrid(17,1);
 
-		instanceManager.process(GetFrameTime(),editor.editorCamera);
+		instanceManager->process(GetFrameTime(),editor.editorCamera);
 
 
 
@@ -62,10 +63,6 @@ class GameWorld
 
     int draw2D(RenderTexture2D renderTexture){
 
-
-        
-
-        // ...now draw all your other windows...
         editor.draw2D(renderTexture,instanceManager);
 
 
