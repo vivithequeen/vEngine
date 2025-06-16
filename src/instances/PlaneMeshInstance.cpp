@@ -12,14 +12,15 @@ class PlaneMeshInstance : public MeshInstance{
     private:
         Vector2 dimentions;
     public:
-    PlaneMeshInstance(Vector3 pos, Vector3 rot, Vector2 di, MaterialInstance mes, string mId) // plane
+    PlaneMeshInstance(Vector3 pos, Vector3 rot, Vector2 di) // plane
     {
         this->position = pos;
         this->rotation = rot;
-        this->material = mes;
+        this->material = MaterialInstance();
         this->dimentions = di;
-        this->id = mId;
+
         this->name = "PlaneMeshInstance";
+        this->type = "PlaneMeshInstance";
         updateMesh();
 
     }

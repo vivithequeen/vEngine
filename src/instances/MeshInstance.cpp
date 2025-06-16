@@ -62,7 +62,7 @@ public:
         return getTransformedBox();
     }
 
-    void process()
+    int process() override
     {
         BoundingBox transformedBox = getTransformedBox();
         if(visible)
@@ -75,6 +75,7 @@ public:
         {
             DrawBoundingBox(transformedBox, RED);
         }
+        return 0;
     }
     int getEditorOptions() override
     {

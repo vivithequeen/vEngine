@@ -14,7 +14,7 @@ class Instance
     public:
     string name;
     string id;
-
+    string type;
     Instance()
     {
         name = "no name";
@@ -22,11 +22,13 @@ class Instance
     const char* getNameAsChar() {
         return name.c_str();
     }
-    int process()
+
+    virtual int process()
     {
         return 0;
     }
-    
+
+
     virtual int getEditorOptions(){
         ImGui::SeparatorText("Instance");
         //static char placeHolder[128] = "Type Here"; //sections for ObjectInstance then MeshInstance ect

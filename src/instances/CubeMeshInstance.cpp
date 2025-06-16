@@ -13,14 +13,15 @@ class CubeMeshInstance: public MeshInstance
     Vector3 dimentions;
     public:
 
-    CubeMeshInstance(Vector3 pos, Vector3 rot, Vector3 di, MaterialInstance mes, string mId) // box
+    CubeMeshInstance(Vector3 pos, Vector3 rot, Vector3 di) // box
     {
         this->position = pos;
         this->rotation = rot;
-        this->material = mes;
+        this->material = MaterialInstance();
         this-> dimentions = di;
-        this->id = mId;
+
         this->name = "CubeMeshInstance";
+        this->type = "CubeMeshInstance";
         updateMesh();
     }
 

@@ -18,6 +18,9 @@ class TransformInstance : public Instance
     TransformInstance(){
         visible = true;
     }
+    int process() override{
+        return 0;
+    }
     int getEditorOptions() override
     {
         Instance::getEditorOptions();

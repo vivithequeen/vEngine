@@ -66,7 +66,7 @@ public:
         ImGuiIO &io = ImGui::GetIO();
 
         ImFont *myFont = io.Fonts->Fonts[1];
-
+        
         ImGui::PushFont(myFont);
         static bool background = true;
         ImGui::SetNextWindowPos(ImVec2(0, 0));                                                  
@@ -109,6 +109,8 @@ public:
         ImGui::BeginMainMenuBar();
         if (ImGui::BeginMenu("File"))
         {
+            ImGui::PushID(0);
+            ImGui::SeparatorText("Project");
             ImGui::MenuItem("New");
             ImGui::MenuItem("Open");
             if (ImGui::BeginMenu("Recents"))
@@ -117,6 +119,18 @@ public:
                 ImGui::MenuItem("beep beep");
                 ImGui::EndMenu();
             }
+            ImGui::PopID();
+
+            ImGui::PushID(1);
+            ImGui::SeparatorText("World");
+            ImGui::MenuItem("New");
+            ImGui::MenuItem("Open");
+            ImGui::PopID();
+            ImGui::PushID(2);
+            ImGui::SeparatorText("Instance");
+            ImGui::MenuItem("New");
+            ImGui::MenuItem("Open");
+            ImGui::PopID();
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Edit"))
@@ -173,6 +187,22 @@ public:
                 if (ImGui::Checkbox("lock mouse", &mouse_locked))
                 {
                 };
+
+                const char* themes[2] = {"Dark","Light"};
+                static int currentItem = 0;
+  
+
+                if(ImGui::Combo("Themes",&currentItem,themes,IM_ARRAYSIZE(themes))){ //cant switch back
+                    switch (currentItem){
+                        case 0:
+                            ImGui::StyleColorsDark();
+                            break;
+                        case 1:
+                            ImGui::StyleColorsLight();
+                            break;
+
+                    }
+                }
                 ImGui::End();
             }
         }
@@ -236,7 +266,7 @@ public:
                 if (ImGui::BeginTabItem("Mesh"))
                 {
                     int index;
-                    for (MeshInstance *m : instanceManager.meshInstanceManager.meshs)
+                    for (auto *m : instanceManager.instances)
                     { // change to getMeshVector()->vector<MeshInstance>
                         ImGui::PushID(index);
                         if (ImGui::MenuItem(m->getNameAsChar()))
@@ -266,36 +296,37 @@ public:
         if (newInstanceWindowOpen)
         {
             ImGui::Begin("New Instance Creator", &newInstanceWindowOpen, ImGuiWindowFlags_MenuBar);
-            ImGui::SeparatorText("VisualInstance"); // xyz rotation positon?
+            //ImGui::SeparatorText("VisualInstance");
+            ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
             if (ImGui::TreeNode("Instance"))
             {
                 if (ImGui::TreeNode("TransformInstance"))
                 {
                     if (ImGui::TreeNode("MeshInstance"))
                     {
-                        if (ImGui::TreeNode("PlaneMeshInstance"))
+                        if (ImGui::TreeNodeEx("PlaneMeshInstance",node_flags))
                         {
 
-                            ImGui::TreePop();
+                            
                         }
-                        if (ImGui::TreeNode("CubeMeshInstance"))
+                        if (ImGui::TreeNodeEx("CubeMeshInstance",node_flags))
                         {
 
-                            ImGui::TreePop();
+                            
                         }
                         ImGui::TreePop();
                     }
                     if (ImGui::TreeNode("ColliderInstance"))
                     {
-                        if (ImGui::TreeNode("BoxColliderInstance"))
+                        if (ImGui::TreeNodeEx("BoxColliderInstance"),node_flags)
                         {
 
-                            ImGui::TreePop();
+                            
                         }
-                        if (ImGui::TreeNode("SphereColliderInstance"))
+                        if (ImGui::TreeNodeEx("SphereColliderInstance"),node_flags)
                         {
 
-                            ImGui::TreePop();
+                            
                         }
                         ImGui::TreePop();
                     }
@@ -348,7 +379,7 @@ public:
                         }
                         else
                         {
-                            ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen; // make work
+                            ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen; 
                             ImGui::TreeNodeEx(filePaths.at(row).substr(13).c_str(), node_flags);
                             // if()
                             if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
