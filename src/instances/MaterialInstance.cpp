@@ -57,7 +57,7 @@ public:
         rlImGuiImageSize(&materialTexture,100,100);
         ImGui::Text("Texture Resolution: %d x %d", materialTexture.width,materialTexture.height);
         ImGui::Text("Texture Filepath: %s", filepath.c_str());
-        ImGui::Button("Upload Image");
+        ImGui::Button("Upload Texture");
         if(ImGui::BeginDragDropTarget()){
             if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("FILEPATH")){
                 std::string newFilePath((const char*)payload->Data, payload->DataSize - 1); 

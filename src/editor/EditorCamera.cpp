@@ -5,6 +5,8 @@
 #include "resource_dir.h"	
 #include "raymath.h"
 
+#ifndef EDITOR_CAMERA
+#define EDITOR_CAMERA
 class EditorCamera{
     public:
     Camera camera;
@@ -28,3 +30,4 @@ class EditorCamera{
         return 0;
     }
 };
+#endif

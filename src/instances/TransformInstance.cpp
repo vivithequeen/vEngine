@@ -3,12 +3,14 @@
 #include "resource_dir.h"
 #include "raymath.h"
 #include "Instance.cpp"
-
+#include "../editor/EditorCamera.cpp"
 using namespace std;
 #ifndef TRANSFORM_INSTANCE
 #define TRANSFORM_INSTANCE
 class TransformInstance : public Instance
 {
+
+    //(GetRayCollisionBox(GetScreenToWorldRay(GetMousePosition(), editorCamera.camera), transformedBox).hit && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
     public:
     Matrix matrix;
     Vector3 position;
@@ -18,7 +20,8 @@ class TransformInstance : public Instance
     TransformInstance(){
         visible = true;
     }
-    int process() override{
+    int process(EditorCamera editorCamera) override
+    {
         return 0;
     }
     int getEditorOptions() override

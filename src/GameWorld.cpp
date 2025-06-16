@@ -53,7 +53,7 @@ class GameWorld
         }
 		DrawGrid(17,1);
 
-		instanceManager.process(GetFrameTime());
+		instanceManager.process(GetFrameTime(),editor.editorCamera);
 
 
 

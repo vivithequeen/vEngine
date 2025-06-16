@@ -2,32 +2,33 @@
 #include "raylib.h"
 #include "resource_dir.h"
 #include "raymath.h"
+#include "Instance.cpp"
 #include "MaterialInstance.cpp"
 #include "TransformInstance.cpp"
 #include "ColliderInstance.cpp"
-#include "../editor/EditorCamera.cpp"
+
 using namespace std;
-#ifndef MESH_INSTANCE
-#define MESH_INSTANCE
-
-class MeshInstance : public TransformInstance
+#ifndef MODEL_INSTANCE
+#define MODEL_INSTANCE
+class ModelInstance : public TransformInstance
 {
-private:
-
-    
-
-public:
-    string id;
-    Mesh mesh;
-    
-    MaterialInstance material;
+    public:
+    Model model;
     ColliderInstance colliderInstance;
+    MaterialInstance material;
+    string filepath;
+    ModelInstance(Vector3 pos, Vector3 rot){
+        this->position = pos;
+        this->rotation = rot;
+        this->material = MaterialInstance();
 
-    MeshInstance()
-    {
 
+        this->name = "ModelInstance";
+        this->type = "ModelInstance";
+        model = LoadModelFromMesh(GenMeshCube(1,1,1));
+        model.materials[0]=material.getMaterial();
+        //model = LoadModel("bomb.glb");
     }
-
     BoundingBox getTransformedBox()
     {
         matrix = MatrixMultiply(MatrixRotateXYZ(rotation), MatrixTranslate(position.x, position.y, position.z)); 
@@ -58,33 +59,17 @@ public:
         }
         return (BoundingBox){newMin, newMax};
     }
-    BoundingBox getBoundingBox()
-    {
-        return getTransformedBox();
-    }
-
     int process(EditorCamera editorCamera) override
     {
-        Model m;
-        
         BoundingBox transformedBox = getTransformedBox();
-        if(visible)
-        {
-            
-            DrawMesh(mesh, material.getMaterial(), matrix);
-
-        }
-        if (colliderInstance.debugVisible)
-        {
-            DrawBoundingBox(transformedBox, RED);
-        }
-
+        //model.transform = matrix;
+        DrawModel(model,Vector3Zero(),1.0f,WHITE);
         return 0;
     }
     int getEditorOptions() override
     {
         TransformInstance::getEditorOptions();
-        ImGui::SeparatorText("MeshInstance");
+        ImGui::SeparatorText("ModelInstance");
         
         
         if(ImGui::TreeNode("ColliderInstance"))
@@ -96,7 +81,22 @@ public:
         {
             material.getEditorOptions();
             ImGui::TreePop();
-        }        
+        }
+
+        ImGui::Text("Model Filepath: %s", filepath.c_str());
+        ImGui::Button("Upload Model");
+        if(ImGui::BeginDragDropTarget()){
+            if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("FILEPATH")){
+                std::string newFilePath((const char*)payload->Data, payload->DataSize - 1); 
+                newFilePath = newFilePath.substr(13);
+                if(newFilePath.substr(newFilePath.size()-3,newFilePath.size()) == "glb")
+                {
+                    filepath = newFilePath;
+                    model = LoadModel(filepath.c_str());
+                    model.materials[0]=material.getMaterial();
+                }
+            }
+        }
         return 0;
     }
 };

@@ -4,7 +4,7 @@
 #include "raymath.h"
 #include "imgui.h"
 #include "rlImGui.h"
-
+#include "../editor/EditorCamera.cpp"
 #include <string>
 using namespace std;
 #ifndef INSTANCE
@@ -23,7 +23,7 @@ class Instance
         return name.c_str();
     }
 
-    virtual int process()
+    virtual int process(EditorCamera editorCamera)
     {
         return 0;
     }
