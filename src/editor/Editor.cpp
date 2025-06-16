@@ -295,7 +295,7 @@ public:
         }
         return 0;
     }
-
+    
     Texture toolTipTexture;
     string currentToolTipTexturePath;
     int assetManagerWindow()
@@ -317,35 +317,38 @@ public:
                     {
                         ImGui::TableSetColumnIndex(column);
    
-                        char buf[256];
-                        snprintf(buf, sizeof(buf), "%s", filePaths.at(row).substr(13).c_str());
-                        if(ImGui::Selectable(buf,column)){
-                            selected = column;
-                        
-    
-                        }
+                        ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen; 
+                        ImGui::TreeNodeEx(filePaths.at(row).substr(13).c_str(),node_flags);
+             
                         if(ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+                        {
+                            const string& path = filePaths.at(row);
+                            ImGui::SetDragDropPayload("FILEPATH", path.c_str(), path.size() + 1); // +1 for null terminator
+                            
+                            
+                            if(filePaths.at(row).substr(filePaths.at(row).size()-3,filePaths.at(row).size()) == "png") // make work with all supported images
                             {
-                                const string& path = filePaths.at(row);
-                                ImGui::SetDragDropPayload("FILEPATH", path.c_str(), path.size() + 1); // +1 for null terminator
-                                
-                                ImGui::Text("%s",filePaths.at(row).c_str());
-                                if(filePaths.at(row).substr(filePaths.at(row).size()-3,filePaths.at(row).size()) == "png") // make work with all supported images
-                                {
-                                    if(currentToolTipTexturePath == filePaths.at(row)){
-
-                                    }
-                                    else
-                                    {
-                                        toolTipTexture = LoadTexture(filePaths.at(row).c_str());
-                                        currentToolTipTexturePath = filePaths.at(row);
-                                    }
-                                    rlImGuiImageSize(&toolTipTexture,50,50);
+                                if(currentToolTipTexturePath == filePaths.at(row)){
 
                                 }
-                                ImGui::EndDragDropSource();
+                                else
+                                {
+                                    toolTipTexture = LoadTexture(filePaths.at(row).c_str());
+                                    currentToolTipTexturePath = filePaths.at(row);
+                                }
+                                rlImGuiImageSize(&toolTipTexture,50,50);
+                                ImGui::Text("%s",filePaths.at(row).c_str());
+
+
                             }
-                        if(ImGui::BeginPopupContextItem()){
+                            ImGui::EndDragDropSource();
+                        }
+                        ImGui::BeginPopupContextItem();
+
+         
+                        
+                        if(ImGui::BeginItemTooltip())
+                        {
                             selected = column;
                             if(filePaths.at(row).substr(filePaths.at(row).size()-3,filePaths.at(row).size()) == "png")
                             {
@@ -362,9 +365,8 @@ public:
                             }
                             ImGui::Text("Full path: %s",filePaths.at(row).c_str());
                             ImGui::Text("File Size: %d",(int)(filesystem::file_size(filePaths.at(row).c_str())));
-                            ImGui::EndPopup();
+                            ImGui::EndTooltip();
                         }
-                        ImGui::SetItemTooltip("Right Click To See Information");
                         //if (column == 1) // size
                         //{
                         //    char buf[256];
@@ -374,8 +376,11 @@ public:
 
                     }
                 }
+
+
                 ImGui::EndTable();
             }
+            
 
             ImGui::End();
         }

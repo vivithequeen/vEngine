@@ -65,8 +65,9 @@ public:
                 if(newFilePath.substr(newFilePath.size()-3,newFilePath.size()) == "png")
                 {
                     filepath = newFilePath;
+                    updateTexture();
                 }
-                updateTexture();
+                
             }
         }
         //do stuff here
