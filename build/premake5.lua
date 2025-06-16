@@ -41,6 +41,7 @@ end
 function build_externals()
      print("calling externals")
      check_raylib()
+     
 end
 
 function platform_defines()
@@ -162,7 +163,7 @@ if (downloadRaylib) then
             ["Widows Resoruce Files/*"] = {"../src/**.rc", "src/**.ico"},
         }
         
-        files {"../build/external/raylib-master/src/imgui_demo.cpp","../build/external/raylib-master/src/imgui_widgets.cpp","../build/external/raylib-master/src/imgui_tables.cpp","../build/external/raylib-master/src/imgui_draw.cpp","../build/external/raylib-master/src/imgui.cpp","../build/external/raylib-master/src/rlImGui.cpp","../src/**.c", "../src/**.cpp", "../src/**.h", "../src/**.hpp", "../include/**.h", "../include/**.hpp"}
+        files {"../build/external/raylib-master/src/imgui_widgets.cpp","../build/external/raylib-master/src/imgui_tables.cpp","../build/external/raylib-master/src/imgui_draw.cpp","../build/external/raylib-master/src/imgui.cpp","../build/external/raylib-master/src/rlImGui.cpp","../src/**.c", "../src/**.cpp", "../src/**.h", "../src/**.hpp", "../include/**.h", "../include/**.hpp"}
         
         filter {"system:windows", "action:vs*"}
             files {"../src/*.rc", "../src/*.ico"}

@@ -36,7 +36,10 @@ public:
 
     Editor()
     {
-
+        ImGuiIO &io = ImGui::GetIO();
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+        //ImGui::DockSpaceOverViewport(0,  NULL, ImGuiDockNodeFlags_PassthruCentralNode);
+        io.ConfigDockingWithShift = true;
         mouse_locked = true;
         editorSettingsOpen = true;
         gameWindowOpen = true;
@@ -60,17 +63,32 @@ public:
         filePaths = getFilePaths("../resources");
         rlImGuiBegin();
         // values
-
-        // graphics stoof
-        bool my_tool_active = true;
-        bool *b = &my_tool_active;
-        ImTextureID texture = (ImTextureID)(uintptr_t)renderTexture.texture.id;
-
         ImGuiIO &io = ImGui::GetIO();
 
         ImFont *myFont = io.Fonts->Fonts[1];
 
         ImGui::PushFont(myFont);
+        static bool background = true;
+        ImGui::SetNextWindowPos(ImVec2(0, 0));                                                  
+        ImGui::SetNextWindowSize(ImVec2(float(GetScreenWidth()), float(GetScreenHeight())));
+        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoBringToFrontOnFocus |                 
+            ImGuiWindowFlags_NoNavFocus |                                                      
+            ImGuiWindowFlags_NoDocking |
+            ImGuiWindowFlags_NoTitleBar |
+            ImGuiWindowFlags_NoResize |
+            ImGuiWindowFlags_NoMove |
+            ImGuiWindowFlags_NoCollapse |
+            ImGuiWindowFlags_MenuBar |
+            ImGuiWindowFlags_NoBackground;
+        ImGui::Begin("background",&background,windowFlags);
+        ImGui::DockSpace(ImGui::GetID("Dockspace"), ImVec2(0.0f, 0.0f),  ImGuiDockNodeFlags_PassthruCentralNode);
+        ImGui::End();
+        // graphics stoof
+        bool my_tool_active = true;
+        bool *b = &my_tool_active;
+        ImTextureID texture = (ImTextureID)(uintptr_t)renderTexture.texture.id;
+
+
         mainMenuBar();
 
         editorSettingsWindow();
@@ -130,6 +148,12 @@ public:
         }
         if (ImGui::BeginMenu("Help"))
         {
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("About"))
+        {
+
+            ImGui::TextLinkOpenURL("Code","https://github.com/vivithequeen/vEngine");
             ImGui::EndMenu();
         }
 
@@ -332,7 +356,7 @@ public:
                                 const string &path = filePaths.at(row);
                                 ImGui::SetDragDropPayload("FILEPATH", path.c_str(), path.size() + 1);
 
-                                if (filePaths.at(row).substr(filePaths.at(row).size() - 3, filePaths.at(row).size()) == "png") // make work with all supported images
+                                if (getFileExtension(filePaths.at(row).c_str()) == "png") // make work with all supported images
                                 {
                                     if (currentToolTipTexturePath == filePaths.at(row))
                                     {
@@ -343,11 +367,13 @@ public:
                                         currentToolTipTexturePath = filePaths.at(row);
                                     }
                                     rlImGuiImageSize(&toolTipTexture, 50, 50);
-                                    ImGui::Text("%s", filePaths.at(row).c_str());
+                                    
                                 }
+                                ImGui::Text("%s", filePaths.at(row).c_str());
+                                ImGui::Text("%dbytes", (int)(filesystem::file_size(filePaths.at(row).c_str())));
                                 ImGui::EndDragDropSource();
                             }
-                            ImGui::BeginPopupContextItem();
+                            
 
                             if (ImGui::BeginItemTooltip())
                             {
@@ -364,8 +390,8 @@ public:
                                     }
                                     rlImGuiImageSize(&toolTipTexture, 50, 50);
                                 }
-                                ImGui::Text("Full path: %s", filePaths.at(row).c_str());
-                                ImGui::Text("File Size: %d", (int)(filesystem::file_size(filePaths.at(row).c_str())));
+                                ImGui::Text("%s", filePaths.at(row).c_str());
+                                ImGui::Text("%dbytes", (int)(filesystem::file_size(filePaths.at(row).c_str())));
                                 ImGui::EndTooltip();
                             }
                             // if (column == 1) // size

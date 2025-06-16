@@ -61,8 +61,11 @@ class GameWorld
     }
 
     int draw2D(RenderTexture2D renderTexture){
-        //DrawFPS(0,0);
 
+
+        
+
+        // ...now draw all your other windows...
         editor.draw2D(renderTexture,instanceManager);
 
 
