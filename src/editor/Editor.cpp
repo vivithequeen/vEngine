@@ -295,7 +295,7 @@ public:
         }
         return 0;
     }
-    
+
     Texture toolTipTexture;
     string currentToolTipTexturePath;
     int assetManagerWindow()
@@ -305,7 +305,7 @@ public:
             ImGui::Begin("Asset Manager", &assetManagerWindowOpen, ImGuiWindowFlags_MenuBar);
             if (ImGui::BeginTable("table1", 1))
             {
-                
+
                 ImGui::TableSetupColumn("File Location");
 
                 ImGui::TableHeadersRow();
@@ -316,86 +316,94 @@ public:
                     for (int column = 0; column < 1; column++)
                     {
                         ImGui::TableSetColumnIndex(column);
-   
-                        ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen; 
-                        ImGui::TreeNodeEx(filePaths.at(row).substr(13).c_str(),node_flags);
-             
-                        if(ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+                        if (filesystem::status(filePaths.at(row)).type() == filesystem::file_type::directory)
                         {
-                            const string& path = filePaths.at(row);
-                            ImGui::SetDragDropPayload("FILEPATH", path.c_str(), path.size() + 1); // +1 for null terminator
-                            
-                            
-                            if(filePaths.at(row).substr(filePaths.at(row).size()-3,filePaths.at(row).size()) == "png") // make work with all supported images
-                            {
-                                if(currentToolTipTexturePath == filePaths.at(row)){
-
-                                }
-                                else
-                                {
-                                    toolTipTexture = LoadTexture(filePaths.at(row).c_str());
-                                    currentToolTipTexturePath = filePaths.at(row);
-                                }
-                                rlImGuiImageSize(&toolTipTexture,50,50);
-                                ImGui::Text("%s",filePaths.at(row).c_str());
-
-
+                            if(ImGui::TreeNode(filePaths.at(row).c_str())){
+                                ImGui::TreePop();
                             }
-                            ImGui::EndDragDropSource();
                         }
-                        ImGui::BeginPopupContextItem();
-
-         
-                        
-                        if(ImGui::BeginItemTooltip())
+                        else
                         {
-                            selected = column;
-                            if(filePaths.at(row).substr(filePaths.at(row).size()-3,filePaths.at(row).size()) == "png")
+                            ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen; // make work
+                            ImGui::TreeNodeEx(filePaths.at(row).substr(13).c_str(), node_flags);
+                            // if()
+                            if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
                             {
-                                if(currentToolTipTexturePath == filePaths.at(row)){
+                                const string &path = filePaths.at(row);
+                                ImGui::SetDragDropPayload("FILEPATH", path.c_str(), path.size() + 1);
 
-                                }
-                                else
+                                if (filePaths.at(row).substr(filePaths.at(row).size() - 3, filePaths.at(row).size()) == "png") // make work with all supported images
                                 {
-                                    toolTipTexture = LoadTexture(filePaths.at(row).c_str());
-                                    currentToolTipTexturePath = filePaths.at(row);
+                                    if (currentToolTipTexturePath == filePaths.at(row))
+                                    {
+                                    }
+                                    else
+                                    {
+                                        toolTipTexture = LoadTexture(filePaths.at(row).c_str());
+                                        currentToolTipTexturePath = filePaths.at(row);
+                                    }
+                                    rlImGuiImageSize(&toolTipTexture, 50, 50);
+                                    ImGui::Text("%s", filePaths.at(row).c_str());
                                 }
-                                rlImGuiImageSize(&toolTipTexture,50,50);
-                                
+                                ImGui::EndDragDropSource();
                             }
-                            ImGui::Text("Full path: %s",filePaths.at(row).c_str());
-                            ImGui::Text("File Size: %d",(int)(filesystem::file_size(filePaths.at(row).c_str())));
-                            ImGui::EndTooltip();
-                        }
-                        //if (column == 1) // size
-                        //{
-                        //    char buf[256];
-                        //    sprintf(buf, "%dbytes", (int)(filesystem::file_size(filePaths.at(row).c_str())));//make so shows thigns correctly (mb, gb ect)
-                        //    ImGui::TextUnformatted(buf);
-                        //}
+                            ImGui::BeginPopupContextItem();
 
+                            if (ImGui::BeginItemTooltip())
+                            {
+                                selected = column;
+                                if (getFileExtension(filePaths.at(row).c_str()) == "png")
+                                {
+                                    if (currentToolTipTexturePath == filePaths.at(row))
+                                    {
+                                    }
+                                    else
+                                    {
+                                        toolTipTexture = LoadTexture(filePaths.at(row).c_str());
+                                        currentToolTipTexturePath = filePaths.at(row);
+                                    }
+                                    rlImGuiImageSize(&toolTipTexture, 50, 50);
+                                }
+                                ImGui::Text("Full path: %s", filePaths.at(row).c_str());
+                                ImGui::Text("File Size: %d", (int)(filesystem::file_size(filePaths.at(row).c_str())));
+                                ImGui::EndTooltip();
+                            }
+                            // if (column == 1) // size
+                            //{
+                            //     char buf[256];
+                            //     sprintf(buf, "%dbytes", (int)(filesystem::file_size(filePaths.at(row).c_str())));//make so shows thigns correctly (mb, gb ect)
+                            //     ImGui::TextUnformatted(buf);
+                            // }
+                        }
                     }
                 }
 
-
                 ImGui::EndTable();
             }
-            
 
             ImGui::End();
         }
         return 0;
     }
-    vector<string> getFilePaths(const std::string &directoryPath)
+    vector<string> getFilePaths(const string &directoryPath)
     {
         vector<string> fp;
         for (const auto &entry : filesystem::directory_iterator(directoryPath))
         {
-            if (filesystem::is_regular_file(entry))
+            if (filesystem::is_regular_file(entry) || filesystem::status(entry).type() == filesystem::file_type::directory)
             {
                 fp.push_back(entry.path().string());
             }
         }
         return fp;
     }
+
+    string getFileExtension(const string &filepath)
+    {
+        size_t dotPos = filepath.find_last_of('.');
+        if (dotPos != string::npos && dotPos + 1 < filepath.length())
+            return filepath.substr(dotPos + 1);
+        return "";
+    }
+
 };
