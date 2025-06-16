@@ -14,26 +14,26 @@ class ModelInstance : public TransformInstance
 {
     public:
     Model model;
-    ColliderInstance colliderInstance;
-    MaterialInstance material;
+    ColliderInstance *colliderInstance;
+    MaterialInstance *material;
     string filepath;
 
     ModelInstance(){
         this->position = (Vector3){0,0,0};
         this->rotation = (Vector3){0,0,0};
-        this->material = MaterialInstance();
-
+        this->material = new MaterialInstance();
+        this->colliderInstance = new ColliderInstance();
 
         this->name = "ModelInstance";
         this->type = "ModelInstance";
-
+        model = LoadModelFromMesh(GenMeshCube(0.1,0.1,0.1));
         //model = LoadModel("bomb.glb");
     }
 
     ModelInstance(Vector3 pos, Vector3 rot){
         this->position = pos;
         this->rotation = rot;
-        this->material = MaterialInstance();
+        this->material = new MaterialInstance();
 
 
         this->name = "ModelInstance";
@@ -46,14 +46,14 @@ class ModelInstance : public TransformInstance
         matrix = MatrixMultiply(MatrixRotateXYZ(rotation), MatrixTranslate(position.x, position.y, position.z)); 
 
         Vector3 corners[8] = {
-            {colliderInstance.collider.min.x, colliderInstance.collider.min.y, colliderInstance.collider.min.z},
-            {colliderInstance.collider.min.x, colliderInstance.collider.min.y, colliderInstance.collider.max.z},
-            {colliderInstance.collider.min.x, colliderInstance.collider.max.y, colliderInstance.collider.min.z},
-            {colliderInstance.collider.min.x, colliderInstance.collider.max.y, colliderInstance.collider.max.z},
-            {colliderInstance.collider.max.x, colliderInstance.collider.min.y, colliderInstance.collider.min.z},
-            {colliderInstance.collider.max.x, colliderInstance.collider.min.y, colliderInstance.collider.max.z},
-            {colliderInstance.collider.max.x, colliderInstance.collider.max.y, colliderInstance.collider.min.z},
-            {colliderInstance.collider.max.x, colliderInstance.collider.max.y, colliderInstance.collider.max.z}};
+            {colliderInstance->collider.min.x, colliderInstance->collider.min.y, colliderInstance->collider.min.z},
+            {colliderInstance->collider.min.x, colliderInstance->collider.min.y, colliderInstance->collider.max.z},
+            {colliderInstance->collider.min.x, colliderInstance->collider.max.y, colliderInstance->collider.min.z},
+            {colliderInstance->collider.min.x, colliderInstance->collider.max.y, colliderInstance->collider.max.z},
+            {colliderInstance->collider.max.x, colliderInstance->collider.min.y, colliderInstance->collider.min.z},
+            {colliderInstance->collider.max.x, colliderInstance->collider.min.y, colliderInstance->collider.max.z},
+            {colliderInstance->collider.max.x, colliderInstance->collider.max.y, colliderInstance->collider.min.z},
+            {colliderInstance->collider.max.x, colliderInstance->collider.max.y, colliderInstance->collider.max.z}};
 
         // Transform all corners
         for (int i = 0; i < 8; i++)
@@ -86,12 +86,12 @@ class ModelInstance : public TransformInstance
         
         if(ImGui::TreeNode("ColliderInstance"))
         {
-            colliderInstance.getEditorOptions();
+            colliderInstance->getEditorOptions();
             ImGui::TreePop();
         }
         if(ImGui::TreeNode("MaterialInstance"))
         {
-            material.getEditorOptions();
+            material->getEditorOptions();
             ImGui::TreePop();
         }
 
@@ -105,7 +105,7 @@ class ModelInstance : public TransformInstance
                 {
                     filepath = newFilePath;
                     model = LoadModel(filepath.c_str());
-                    model.materials[0]=material.getMaterial();
+                    model.materials[0]=material->getMaterial();
                 }
             }
         }

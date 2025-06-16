@@ -15,7 +15,7 @@ class PlaneMeshInstance : public MeshInstance{
     PlaneMeshInstance(){
         this->position = (Vector3){0,0,0};
         this->rotation = (Vector3){0,0,0};
-        this->material = MaterialInstance();
+
         this->dimentions = (Vector2){1,1};
 
         this->name = "PlaneMeshInstance";
@@ -26,7 +26,7 @@ class PlaneMeshInstance : public MeshInstance{
     {
         this->position = pos;
         this->rotation = rot;
-        this->material = MaterialInstance();
+        
         this->dimentions = di;
 
         this->name = "PlaneMeshInstance";
@@ -36,7 +36,7 @@ class PlaneMeshInstance : public MeshInstance{
     }
     int updateMesh(){
         mesh = GenMeshPlane(dimentions.x, dimentions.y, 1, 1);
-        colliderInstance.collider = GetMeshBoundingBox(mesh);
+        colliderInstance->collider = GetMeshBoundingBox(mesh);
         return 0;
     }
     int getEditorOptions() override

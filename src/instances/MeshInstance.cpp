@@ -20,12 +20,13 @@ public:
     string id;
     Mesh mesh;
     
-    MaterialInstance material;
-    ColliderInstance colliderInstance;
+    MaterialInstance *material;
+    ColliderInstance *colliderInstance;
 
     MeshInstance()
     {
-
+        this->material = new MaterialInstance();
+        this->colliderInstance = new ColliderInstance();
     }
 
     BoundingBox getTransformedBox()
@@ -33,14 +34,14 @@ public:
         matrix = MatrixMultiply(MatrixRotateXYZ(rotation), MatrixTranslate(position.x, position.y, position.z)); 
 
         Vector3 corners[8] = {
-            {colliderInstance.collider.min.x, colliderInstance.collider.min.y, colliderInstance.collider.min.z},
-            {colliderInstance.collider.min.x, colliderInstance.collider.min.y, colliderInstance.collider.max.z},
-            {colliderInstance.collider.min.x, colliderInstance.collider.max.y, colliderInstance.collider.min.z},
-            {colliderInstance.collider.min.x, colliderInstance.collider.max.y, colliderInstance.collider.max.z},
-            {colliderInstance.collider.max.x, colliderInstance.collider.min.y, colliderInstance.collider.min.z},
-            {colliderInstance.collider.max.x, colliderInstance.collider.min.y, colliderInstance.collider.max.z},
-            {colliderInstance.collider.max.x, colliderInstance.collider.max.y, colliderInstance.collider.min.z},
-            {colliderInstance.collider.max.x, colliderInstance.collider.max.y, colliderInstance.collider.max.z}};
+            {colliderInstance->collider.min.x, colliderInstance->collider.min.y, colliderInstance->collider.min.z},
+            {colliderInstance->collider.min.x, colliderInstance->collider.min.y, colliderInstance->collider.max.z},
+            {colliderInstance->collider.min.x, colliderInstance->collider.max.y, colliderInstance->collider.min.z},
+            {colliderInstance->collider.min.x, colliderInstance->collider.max.y, colliderInstance->collider.max.z},
+            {colliderInstance->collider.max.x, colliderInstance->collider.min.y, colliderInstance->collider.min.z},
+            {colliderInstance->collider.max.x, colliderInstance->collider.min.y, colliderInstance->collider.max.z},
+            {colliderInstance->collider.max.x, colliderInstance->collider.max.y, colliderInstance->collider.min.z},
+            {colliderInstance->collider.max.x, colliderInstance->collider.max.y, colliderInstance->collider.max.z}};
 
         // Transform all corners
         for (int i = 0; i < 8; i++)
@@ -71,10 +72,10 @@ public:
         if(visible)
         {
             
-            DrawMesh(mesh, material.getMaterial(), matrix);
+            DrawMesh(mesh, material->getMaterial(), matrix);
 
         }
-        if (colliderInstance.debugVisible)
+        if (colliderInstance->debugVisible)
         {
             DrawBoundingBox(transformedBox, RED);
         }
@@ -89,12 +90,12 @@ public:
         
         if(ImGui::TreeNode("ColliderInstance"))
         {
-            colliderInstance.getEditorOptions();
+            colliderInstance->getEditorOptions();
             ImGui::TreePop();
         }
         if(ImGui::TreeNode("MaterialInstance"))
         {
-            material.getEditorOptions();
+            material->getEditorOptions();
             ImGui::TreePop();
         }        
         return 0;

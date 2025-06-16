@@ -13,7 +13,7 @@ class Instance
 {
     public:
     string name;
-    string id;
+
     string type;
     Instance()
     {

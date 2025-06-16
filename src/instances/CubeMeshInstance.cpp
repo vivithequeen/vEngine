@@ -16,7 +16,7 @@ class CubeMeshInstance: public MeshInstance
     {
         this->position = (Vector3){0,0,0};;
         this->rotation = (Vector3){0,0,0};;
-        this->material = MaterialInstance();
+
         this-> dimentions = (Vector3){1,1,1};;
 
         this->name = "CubeMeshInstance";
@@ -27,7 +27,7 @@ class CubeMeshInstance: public MeshInstance
     {
         this->position = pos;
         this->rotation = rot;
-        this->material = MaterialInstance();
+
         this-> dimentions = di;
 
         this->name = "CubeMeshInstance";
@@ -37,7 +37,7 @@ class CubeMeshInstance: public MeshInstance
 
     int updateMesh(){
         mesh = GenMeshCube(dimentions.x, dimentions.y, dimentions.z);
-        colliderInstance.collider = GetMeshBoundingBox(mesh);
+        colliderInstance->collider = GetMeshBoundingBox(mesh);
         return 0;
     }
     int getEditorOptions() override

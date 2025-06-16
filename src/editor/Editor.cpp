@@ -265,7 +265,7 @@ public:
             {
                 if (ImGui::BeginTabItem("Mesh"))
                 {
-                    int index;
+                    int index=0;
                     for (auto *m : instanceManager->instances)
                     { // change to getMeshVector()->vector<MeshInstance>
                         ImGui::PushID(index);
@@ -345,7 +345,7 @@ public:
 
     int instanceInspectorWindow()
     {
-        if (instanceInspectorOpen)
+        if (instanceInspectorOpen && currentInstanceInspectorInstance)
         {
             ImGui::Begin("Instance Inspector", &instanceInspectorOpen, ImGuiWindowFlags_MenuBar); // add name functionality
             currentInstanceInspectorInstance->getEditorOptions();                                                              // CHANGE SEPERATE INSTANCE MANAGERS TO JUST BE A SINGLE INSTANGE MANAGER

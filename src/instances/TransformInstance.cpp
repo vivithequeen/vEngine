@@ -19,6 +19,7 @@ class TransformInstance : public Instance
 
     TransformInstance(){
         visible = true;
+        matrix = Matrix();
     }
     int process(EditorCamera editorCamera) override
     {
