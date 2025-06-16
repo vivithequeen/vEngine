@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <filesystem>
 #include <fstream>
+#include <cstdio>
 #include "raylib.h"
 #include "rcamera.h"
 #include "resource_dir.h"
@@ -32,7 +33,7 @@ private:
     Instance *currentInstanceInspectorInstance;
 
     vector<string> filePaths;
-
+    vector<string> lines;
 public:
     EditorCamera editorCamera;
 
@@ -53,16 +54,29 @@ public:
 
         console = EditorConsole();
 
-        std::filesystem::path filePath = "peak.json";
-        if(std::filesystem::is_directory(filePath)){
+
+        
+        std::ofstream worldSave("myWorld.txt");
+        if(worldSave.is_open()){
+            worldSave<<"test!!"<<endl;
+            worldSave<<"pp poo poo"<<endl;
+
             
         }
         else
         {
-            //std::filesystem::create_file(filePath);
-
+            std::cerr << "Error opening input file." << std::endl;
         }
-
+        std::ifstream inputFile("myWorld.txt");
+        if (inputFile.is_open()) {
+            string line;
+            while (inputFile >> line) {
+                lines.push_back(line);
+            }
+            inputFile.close();
+        }else {
+            std::cerr << "Error opening input file." << std::endl;
+        }
     }
 
     int process(float dt)
@@ -111,9 +125,10 @@ public:
         instanceInspectorWindow();
         assetManagerWindow();
         console.drawConsole();
-
         ImGui::PopFont();
+
         rlImGuiEnd();
+
         return 0;
     }
 
