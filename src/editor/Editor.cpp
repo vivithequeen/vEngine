@@ -1,13 +1,15 @@
 #include <iostream>
 #include <vector>
 #include <cstdint>
+#include <filesystem>
+#include <fstream>
 #include "raylib.h"
 #include "rcamera.h"
 #include "resource_dir.h"
 #include "raymath.h"
 #include "imgui.h"
 #include "rlImGui.h"
-#include "filesystem"
+
 #include "../instanceManagers/InstanceManager.cpp"
 #include "EditorCamera.cpp"
 #include "EditorConsole.cpp"
@@ -50,6 +52,17 @@ public:
         assetManagerWindowOpen = true;
 
         console = EditorConsole();
+
+        std::filesystem::path filePath = "peak.json";
+        if(std::filesystem::is_directory(filePath)){
+            
+        }
+        else
+        {
+            //std::filesystem::create_file(filePath);
+
+        }
+
     }
 
     int process(float dt)
@@ -253,7 +266,7 @@ public:
 
             if (ImGui::BeginMenuBar())
             {
-                if (ImGui::BeginMenu("File"))
+                if (ImGui::BeginMenu("New"))
                 {
                     ImGui::MenuItem("New Instance", NULL, &newInstanceWindowOpen);
 
@@ -261,31 +274,22 @@ public:
                 }
                 ImGui::EndMenuBar();
             }
-            if (ImGui::BeginTabBar("Instances"))
-            {
-                if (ImGui::BeginTabItem("Mesh"))
+            int index=0;
+            for (auto *m : instanceManager->instances)
+            { 
+                ImGui::PushID(index);
+                if (ImGui::MenuItem(m->getNameAsChar()))
                 {
-                    int index=0;
-                    for (auto *m : instanceManager->instances)
-                    { // change to getMeshVector()->vector<MeshInstance>
-                        ImGui::PushID(index);
-                        if (ImGui::MenuItem(m->getNameAsChar()))
-                        {
-                            currentInstanceInspectorInstance = m;
-                            instanceInspectorOpen = true;
-                        }
-                        ImGui::PopID();
-                        index++;
-                    }
-                    ImGui::EndTabItem();
+                    currentInstanceInspectorInstance = m;
+                    instanceInspectorOpen = true;
                 }
-                if (ImGui::BeginTabItem("Models"))
-                {
-                    ImGui::EndTabItem();
-                }
-
-                ImGui::EndTabBar();
+                ImGui::PopID();
+                index++;
             }
+                    
+                
+
+            
 
             ImGui::End();
         }
@@ -296,7 +300,7 @@ public:
         if (newInstanceWindowOpen)
         {
             ImGui::Begin("New Instance Creator", &newInstanceWindowOpen, ImGuiWindowFlags_MenuBar);
-            //ImGui::SeparatorText("VisualInstance");
+            
             ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
             if (ImGui::TreeNode("Instance"))
             {
@@ -307,17 +311,24 @@ public:
                         if (ImGui::Button("PlaneMeshInstance"))
                         {
                             instanceManager->instances.push_back(new PlaneMeshInstance());
+                            newInstanceWindowOpen = false;
+ 
                             
                         }
                         if (ImGui::Button("CubeMeshInstance"))
                         {
                             instanceManager->instances.push_back(new CubeMeshInstance());
+                            newInstanceWindowOpen = false;
+
                         }
                         ImGui::TreePop();
                     }
                     if (ImGui::Button("ModelInstance"))
                     {
                         instanceManager->instances.push_back(new ModelInstance());
+                        newInstanceWindowOpen = false;
+                        ImGui::TreePop();
+                        return 0;
                     }
                     if (ImGui::TreeNode("ColliderInstance"))
                     {
