@@ -115,7 +115,7 @@ class ModelInstance : public TransformInstance
     {
         string str;
         
-        str+="mModelInstance:Filepath:" + filepath + "MaterialInstance:FilePath" + material->getFilePath() + "ColliderInstance:DebugVisible" + to_string(colliderInstance->debugVisible) + "DoesColliton:"+to_string(colliderInstance->doesCollition) ;
+        str+="ModelInstance:Filepath:" + filepath + "MaterialInstance:FilePath" + material->getFilePath() + "ColliderInstance:DebugVisible" + to_string(colliderInstance->debugVisible) + "DoesColliton:"+to_string(colliderInstance->doesCollition)+"modinst" ;
         str+=TransformInstance::getSaveString();
         return str;
 

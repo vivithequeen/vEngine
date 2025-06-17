@@ -237,6 +237,7 @@ public:
                 }
                 ImGui::EndMenuBar();
             }
+            ImGui::Image(texture, ImVec2(ImGui::GetWindowSize().x, ImGui::GetWindowSize().x * 9.0 / 16), ImVec2(0, 1), ImVec2(1, 0));
             if (ImGui::IsMouseHoveringRect(ImGui::GetWindowPos(), ImGui::GetWindowSize()) && ImGui::IsMouseDown(ImGuiMouseButton_Right))
             { // freecam mode
                 // HideCursor();
@@ -250,7 +251,7 @@ public:
                 isEditorCameraActive = false;
             }
 
-            ImGui::Image(texture, ImVec2(ImGui::GetWindowSize().x, ImGui::GetWindowSize().x * 9.0 / 16), ImVec2(0, 1), ImVec2(1, 0));
+            
 
             ImGui::End();
         }

@@ -43,7 +43,7 @@ class Instance
     virtual string getSaveString()
     {
         string str;
-        str+="Instance:Name:" + name;
+        str+="Instance:Name:" + name+"bsinst";
         return str;
         
     }

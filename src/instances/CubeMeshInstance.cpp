@@ -94,7 +94,7 @@ class CubeMeshInstance: public MeshInstance
     {
         string str;
         
-        str+="cCubeMeshInstance:Dimentions:(" + to_string(dimentions.x) + "," + to_string(dimentions.y) + "," + to_string(dimentions.z) + ")";
+        str+="cCubeMeshInstance:Dimentions:(" + to_string(dimentions.x) + "," + to_string(dimentions.y) + "," + to_string(dimentions.z) + ")cubemeshinst";
         str+=MeshInstance::getSaveString();
         return str;
 

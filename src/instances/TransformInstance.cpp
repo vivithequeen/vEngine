@@ -75,7 +75,7 @@ class TransformInstance : public Instance
     string getSaveString() override
     {
         string str;
-        str+="TransformInstance:Position:(" + to_string(position.x) + "," + to_string(position.y) + "," + to_string(position.z) + ")Rotation:("+ to_string(rotation.x) + "," + to_string(rotation.y) + "," + to_string(rotation.z) +")";
+        str+="TransformInstance:Position:(" + to_string(position.x) + "," + to_string(position.y) + "," + to_string(position.z) + ")Rotation:("+ to_string(rotation.x) + "," + to_string(rotation.y) + "," + to_string(rotation.z) +")trainst";
         str+=Instance::getSaveString();
         return str;
         

@@ -1,1 +1,1 @@
-cCubeMeshInstance:Dimentions:(1.000000,1.000000,1.000000)MeshInstance:MaterialInstance:FilePathColliderInstance:DebugVisible1DoesColliton:1TransformInstance:Position:(-1.000000,14.000000,0.000000)Rotation:(3.141593,0.422405,0.000000)Instance:Name:CubeMeshInstance
+cCubeMeshInstance:Dimentions:(2.000000,3.000000,4.000000)cubemeshinstMeshInstance:MaterialInstance:FilePathColliderInstance:DebugVisible1DoesColliton:1meshinstTransformInstance:Position:(1.000000,-1.000000,2.000000)Rotation:(1.810413,2.481596,2.270394)trainstInstance:Name:CubeMeshInstancebsinst
