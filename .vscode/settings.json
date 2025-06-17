@@ -73,6 +73,7 @@
 		"codecvt": "cpp",
 		"map": "cpp",
 		"bitset": "cpp",
-		"regex": "cpp"
+		"regex": "cpp",
+		"filesystem": "cpp"
 	}
 }

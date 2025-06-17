@@ -63,5 +63,14 @@ class PlaneMeshInstance : public MeshInstance{
         }
         return 0;
     }
+    string getSaveString() override
+    {
+        string str;
+        
+        str+="pPlaneMeshInstance:Dimentions:(" + to_string(dimentions.x) + "," + to_string(dimentions.y)  + ")";
+        str+=MeshInstance::getSaveString();
+        return str;
+
+    }
 };
 #endif

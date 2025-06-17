@@ -111,5 +111,14 @@ class ModelInstance : public TransformInstance
         }
         return 0;
     }
+    string getSaveString() override
+    {
+        string str;
+        
+        str+="mModelInstance:Filepath:" + filepath + "MaterialInstance:FilePath" + material->getFilePath() + "ColliderInstance:DebugVisible" + to_string(colliderInstance->debugVisible) + "DoesColliton:"+to_string(colliderInstance->doesCollition) ;
+        str+=TransformInstance::getSaveString();
+        return str;
+
+    }
 };
 #endif

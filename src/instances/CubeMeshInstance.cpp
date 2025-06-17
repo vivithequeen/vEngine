@@ -67,10 +67,16 @@ class CubeMeshInstance: public MeshInstance
             updateMesh();
         }
 
-
-
-        
         return 0;
+    }
+    string getSaveString() override
+    {
+        string str;
+        
+        str+="cCubeMeshInstance:Dimentions:(" + to_string(dimentions.x) + "," + to_string(dimentions.y) + "," + to_string(dimentions.z) + ")";
+        str+=MeshInstance::getSaveString();
+        return str;
+
     }
 };
 #endif

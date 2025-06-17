@@ -14,7 +14,7 @@
 #include "../instanceManagers/InstanceManager.cpp"
 #include "EditorCamera.cpp"
 #include "EditorConsole.cpp"
-
+#include "FileManager.cpp"
 class Editor
 {
 private:
@@ -31,12 +31,13 @@ private:
 
     EditorConsole console;
     Instance *currentInstanceInspectorInstance;
-
+    FileManager fileManager;
+    
     vector<string> filePaths;
     vector<string> lines;
 public:
     EditorCamera editorCamera;
-
+    
     Editor()
     {
         ImGuiIO &io = ImGui::GetIO();
@@ -56,27 +57,7 @@ public:
 
 
         
-        std::ofstream worldSave("myWorld.txt");
-        if(worldSave.is_open()){
-            worldSave<<"test!!"<<endl;
-            worldSave<<"pp poo poo"<<endl;
 
-            
-        }
-        else
-        {
-            std::cerr << "Error opening input file." << std::endl;
-        }
-        std::ifstream inputFile("myWorld.txt");
-        if (inputFile.is_open()) {
-            string line;
-            while (inputFile >> line) {
-                lines.push_back(line);
-            }
-            inputFile.close();
-        }else {
-            std::cerr << "Error opening input file." << std::endl;
-        }
     }
 
     int process(float dt)
@@ -216,17 +197,20 @@ public:
                 {
                 };
 
-                const char* themes[2] = {"Dark","Light"};
+                const char* themes[3] = {"Dark", "Light", "Purple"};
                 static int currentItem = 0;
   
 
-                if(ImGui::Combo("Themes",&currentItem,themes,IM_ARRAYSIZE(themes))){ //cant switch back
+                if(ImGui::Combo("Themes",&currentItem,themes,IM_ARRAYSIZE(themes))){ 
                     switch (currentItem){
                         case 0:
                             ImGui::StyleColorsDark();
                             break;
                         case 1:
                             ImGui::StyleColorsLight();
+                            break;
+                        case 2:
+                            ImGui::StyleColorsClassic();
                             break;
 
                     }
@@ -315,7 +299,15 @@ public:
         if (newInstanceWindowOpen)
         {
             ImGui::Begin("New Instance Creator", &newInstanceWindowOpen, ImGuiWindowFlags_MenuBar);
-            
+            if(ImGui::Button("SAVE!!")){
+                fileManager.saveWorldInstance(instanceManager);
+            }
+
+
+            if(ImGui::Button("LOAD!!!!")){
+                fileManager.loadWorldInstance("myWorld.vWorld",instanceManager);
+            }
+
             ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
             if (ImGui::TreeNode("Instance"))
             {
@@ -342,8 +334,8 @@ public:
                     {
                         instanceManager->instances.push_back(new ModelInstance());
                         newInstanceWindowOpen = false;
-                        ImGui::TreePop();
-                        return 0;
+
+
                     }
                     if (ImGui::TreeNode("ColliderInstance"))
                     {

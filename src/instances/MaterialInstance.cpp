@@ -37,6 +37,9 @@ public:
         this->name = "MaterialInstance";
         this->material = m;
     }
+    string getFilePath(){
+        return filepath;
+    }
     int updateTexture()
     {
 

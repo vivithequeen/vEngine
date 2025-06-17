@@ -40,6 +40,13 @@ class Instance
         }
         return 0;
     }
+    virtual string getSaveString()
+    {
+        string str;
+        str+="Instance:Name:" + name;
+        return str;
+        
+    }
     virtual ~Instance() = default;
     
 };

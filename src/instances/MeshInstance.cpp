@@ -17,7 +17,7 @@ private:
     
 
 public:
-    string id;
+
     Mesh mesh;
     
     MaterialInstance *material;
@@ -99,6 +99,13 @@ public:
             ImGui::TreePop();
         }        
         return 0;
+    }
+    string getSaveString() override
+    {
+        string str;
+        str+="MeshInstance:MaterialInstance:FilePath" + material->getFilePath() + "ColliderInstance:DebugVisible" + to_string(colliderInstance->debugVisible) + "DoesColliton:"+to_string(colliderInstance->doesCollition);
+        str+=TransformInstance::getSaveString();
+        return str;
     }
 };
 #endif
