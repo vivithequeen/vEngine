@@ -20,6 +20,8 @@ class PlaneMeshInstance : public MeshInstance{
 
         this->name = "PlaneMeshInstance";
         this->type = "PlaneMeshInstance";
+        dimentionsEditor[0] = dimentions.x;
+        dimentionsEditor[1] = dimentions.y;
         updateMesh();       
     }
     PlaneMeshInstance(Vector3 pos, Vector3 rot, Vector2 di) // plane
@@ -31,6 +33,8 @@ class PlaneMeshInstance : public MeshInstance{
 
         this->name = "PlaneMeshInstance";
         this->type = "PlaneMeshInstance";
+        dimentionsEditor[0] = dimentions.x;
+        dimentionsEditor[1] = dimentions.y;
         updateMesh();
 
     }
@@ -39,11 +43,12 @@ class PlaneMeshInstance : public MeshInstance{
         colliderInstance->collider = GetMeshBoundingBox(mesh);
         return 0;
     }
+    float dimentionsEditor[2] ;
     int getEditorOptions() override
     {
         MeshInstance::getEditorOptions();
         ImGui::SeparatorText("PlaneMeshInstance");
-        static float dimentionsEditor[2] = { dimentions.x, dimentions.y};
+        
         
 
         if(ImGui::Button("Reset",ImVec2(50,20)))

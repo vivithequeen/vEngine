@@ -20,17 +20,19 @@ class TransformInstance : public Instance
     TransformInstance(){
         visible = true;
         matrix = Matrix();
+    
     }
     int process(EditorCamera editorCamera) override
     {
         return 0;
     }
+    float positionEditor[3]; 
+    float rotationEditor[3];
     int getEditorOptions() override
     {
         Instance::getEditorOptions();
         ImGui::SeparatorText("TransformInstance"); 
-        static float positionEditor[3] = {position.x, position.y, position.z};
-        static float rotationEditor[3] = {RAD2DEG * rotation.x, RAD2DEG * rotation.y,RAD2DEG *  rotation.z};
+        
 
 
         ImGui::PushID(0);

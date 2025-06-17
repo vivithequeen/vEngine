@@ -25,7 +25,7 @@ public:
         // testing!!!!
 
 
-        makeCubeMesh((Vector3){0, 2, 0}, (Vector3){0, 0, 0}, (Vector3){3, 3, 3});
+        //makeCubeMesh((Vector3){0, 2, 0}, (Vector3){0, 0, 0}, (Vector3){3, 3, 3});
         //makePlaneMesh((Vector3){0, 0, 0}, (Vector3){0, 0, 0}, (Vector2){2, 2});
     }
 

@@ -21,6 +21,16 @@ class CubeMeshInstance: public MeshInstance
 
         this->name = "CubeMeshInstance";
         this->type = "CubeMeshInstance";
+        dimentionsEditor[0] = dimentions.x;
+        dimentionsEditor[1] = dimentions.y;
+        dimentionsEditor[2] = dimentions.z;
+        positionEditor[0] = position.x;
+        positionEditor[1] = position.y;
+        positionEditor[2] = position.z;
+
+        rotationEditor[0] = RAD2DEG * rotation.x; 
+        rotationEditor[1] = RAD2DEG * rotation.y;    
+        rotationEditor[2] = RAD2DEG *  rotation.z;   
         updateMesh();
     }
     CubeMeshInstance(Vector3 pos, Vector3 rot, Vector3 di) // box
@@ -32,6 +42,16 @@ class CubeMeshInstance: public MeshInstance
 
         this->name = "CubeMeshInstance";
         this->type = "CubeMeshInstance";
+        dimentionsEditor[0] = dimentions.x;
+        dimentionsEditor[1] = dimentions.y;
+        dimentionsEditor[2] = dimentions.z;
+        positionEditor[0] = position.x;
+        positionEditor[1] = position.y;
+        positionEditor[2] = position.z;
+
+        rotationEditor[0] = RAD2DEG * rotation.x; 
+        rotationEditor[1] = RAD2DEG * rotation.y;    
+        rotationEditor[2] = RAD2DEG *  rotation.z;   
         updateMesh();
     }
 
@@ -40,11 +60,12 @@ class CubeMeshInstance: public MeshInstance
         colliderInstance->collider = GetMeshBoundingBox(mesh);
         return 0;
     }
+    float dimentionsEditor[3];
     int getEditorOptions() override
     { 
         MeshInstance::getEditorOptions();
         ImGui::SeparatorText("CubeMeshInstance");
-        static float dimentionsEditor[3] = { dimentions.x, dimentions.y, dimentions.z};
+        
         
 
         if(ImGui::Button("Reset",ImVec2(50,20)))

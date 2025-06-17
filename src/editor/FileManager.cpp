@@ -43,25 +43,31 @@ public:
         vector<string> lines = getElementsOfFile(filepath);
         for (string perLine : lines)
         {
-            if (perLine.c_str()[0] == 'c')
+            if(perLine.find("Instance"))
             {
-                float dx;
-                float dy;
-                float dz;
-                char mfp;
-                int cdv;
-                int cdc;
+                if (perLine.c_str()[0] == 'c')
+                {
+                    size_t dimStart = perLine.find("Dimentions:(");
+                    size_t dimEnd = perLine.find(")", dimStart);
+                    std::string dimStr = perLine.substr(dimStart + 12, dimEnd - (dimStart + 12));
+                    float dx, dy, dz;
+                    sscanf(dimStr.c_str(), "%f,%f,%f", &dx, &dy, &dz);
 
-                float px;
-                float py;
-                float pz;
-                float rx;
-                float ry;
-                float rz;
-                char n;
+                    // Find Position
+                    size_t posStart = perLine.find("Position:(");
+                    size_t posEnd = perLine.find(")", posStart);
+                    std::string posStr = perLine.substr(posStart + 10, posEnd - (posStart + 10));
+                    float px, py, pz;
+                    sscanf(posStr.c_str(), "%f,%f,%f", &px, &py, &pz);
 
-                sscanf(perLine.c_str(), "cCubeMeshInstance:Dimentions:(%f,%f,%f)MeshInstance:MaterialInstance:FilePath%sColliderInstance:DebugVisible%dDoesColliton:%dTransformInstance:Position:(%f,%f,%f)Rotation:(%f,%f,%f)Instance:Name:%s", &dx, &dy, &dz, &mfp, &cdv, &cdc, &px, &py, &pz, &rx, &ry, &rz ,&n);
-                instanceManager->makeCubeMesh((Vector3){px,py,pz},(Vector3){rx,ry,rz},(Vector3){dx,dy,dz});
+                    size_t rotStart = perLine.find("Rotation:(");
+                    size_t rotEnd = perLine.find(")", posStart);
+                    std::string rotStr = perLine.substr(rotStart + 10, rotEnd - (rotStart + 10));
+                    float rx, ry, rz;
+                    sscanf(rotStr.c_str(), "%f,%f,%f", &rx, &ry, &rz);
+                    // Now you can use these values to create your instance
+                    instanceManager->makeCubeMesh({px, py, pz}, {rx, ry, rz}, {dx, dy, dz});
+                }
             }
         }
         return 0;

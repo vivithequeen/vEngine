@@ -277,8 +277,10 @@ public:
             for (auto *m : instanceManager->instances)
             { 
                 ImGui::PushID(index);
+                
                 if (ImGui::MenuItem(m->getNameAsChar()))
                 {
+                    currentInstanceInspectorInstance = nullptr;
                     currentInstanceInspectorInstance = m;
                     instanceInspectorOpen = true;
                 }
