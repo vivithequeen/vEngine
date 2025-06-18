@@ -28,6 +28,7 @@ private:
     bool newInstanceWindowOpen;
     bool instanceInspectorOpen;
     bool assetManagerWindowOpen;
+    bool newGameInstanceWindowOpen;
 
     bool isEditorCameraActive;
 
@@ -37,7 +38,8 @@ private:
     
     vector<string> filePaths;
     vector<string> lines;
-    WorldInstance currentWorldInstance;
+    vector<WorldInstance> worldInstances;
+    int currentWorldInstanceIndex;
     
 public:
 
@@ -56,9 +58,14 @@ public:
         instanceInspectorOpen = false;
         isEditorCameraActive = false;
         assetManagerWindowOpen = true;
-        
+        newGameInstanceWindowOpen = false;
+        currentWorldInstanceIndex = 0;
+
+        name = "";
         console = EditorConsole();
 
+        worldInstances.push_back(WorldInstance());
+        worldInstances.push_back(WorldInstance());
 
         
 
@@ -78,9 +85,12 @@ public:
 		BeginTextureMode(renderTexture);
 		ClearBackground(BLACK);
 
-		BeginMode3D(currentWorldInstance.editorCamera.camera);
-        DrawGrid(17,1);
-		currentWorldInstance.process(GetFrameTime(),isEditorCameraActive);
+		BeginMode3D(worldInstances.at(currentWorldInstanceIndex).editorCamera.camera);
+        DrawGrid(50,1);
+        DrawLine3D((Vector3){-25,0,0},(Vector3){25,0,0},RED);
+        DrawLine3D((Vector3){0,-25,0},(Vector3){0,25,0},GREEN);
+        DrawLine3D((Vector3){0,0,-25},(Vector3){0,0,25},BLUE);
+		worldInstances.at(currentWorldInstanceIndex).process(GetFrameTime(),isEditorCameraActive);
 		EndMode3D();
 		DrawFPS(0,0);
 		EndTextureMode();
@@ -90,12 +100,6 @@ public:
     {
         
 		ClearBackground(BLACK);
-		
-
-
-
-		
-		
 		
         
         filePaths = getFilePaths("../resources");
@@ -131,10 +135,11 @@ public:
 
         editorSettingsWindow();
         gameWindow();
-        instanceManagerWindow(currentWorldInstance.instanceManager);
-        newInstanceWindow(currentWorldInstance.instanceManager);
+        instanceManagerWindow(worldInstances.at(currentWorldInstanceIndex).instanceManager);
+        newInstanceWindow(worldInstances.at(currentWorldInstanceIndex).instanceManager);
         instanceInspectorWindow();
         assetManagerWindow();
+        newGameInstanceWindow();
         console.drawConsole();
         ImGui::PopFont();
         
@@ -257,18 +262,32 @@ public:
             // does not scale correctly, it should keep its proportions
             ImTextureID texture = (ImTextureID)(uintptr_t)renderTexture.texture.id;
 
-            ImGui::Begin("Game Window", &gameWindowOpen, ImGuiWindowFlags_MenuBar);
+            ImGui::Begin("Game Window", &gameWindowOpen, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoScrollbar);
 
             if (ImGui::BeginMenuBar())
             {
                 if (ImGui::BeginMenu("File"))
                 {
+                    ImGui::MenuItem("New World Instance", NULL, &newGameInstanceWindowOpen);
                     ImGui::EndMenu();
                 }
                 ImGui::EndMenuBar();
             }
-            ImGui::Image(texture, ImVec2(ImGui::GetWindowSize().x, ImGui::GetWindowSize().x * 9.0 / 16), ImVec2(0, 1), ImVec2(1, 0));
-            if (ImGui::IsMouseHoveringRect(ImGui::GetWindowPos(), ImGui::GetWindowSize()) && ImGui::IsMouseDown(ImGuiMouseButton_Right))
+            ImGui::BeginTabBar("worlds");
+            int index = 0;
+            for(WorldInstance w : worldInstances)
+            {
+                ImGui::PushID(index);
+                if(ImGui::BeginTabItem(worldInstances.at(index).worldName.c_str())){
+                    currentWorldInstanceIndex = index;
+                    ImGui::Image(texture, ImVec2(ImGui::GetWindowSize().x, ImGui::GetWindowSize().x * 9.0 / 16), ImVec2(0, 1), ImVec2(1, 0));
+                    ImGui::EndTabItem();
+                }
+                index++;
+                ImGui::PopID();
+            }
+            ImGui::EndTabBar();
+            if (ImGui::IsMouseHoveringRect(ImGui::GetWindowPos(), ImVec2(ImGui::GetWindowSize().x,ImGui::GetWindowSize().x * 9.0 / 16)) && ImGui::IsMouseDown(ImGuiMouseButton_Right))
             { // freecam mode
                 // HideCursor();
                 // DisableCursor();
@@ -283,6 +302,28 @@ public:
 
             
 
+            ImGui::End();
+        }
+        return 0;
+    }
+    string name;
+    int newGameInstanceWindow()
+    {
+        if(newGameInstanceWindowOpen){
+            ImGui::Begin("New Game Instance");
+            static char nameInput[128] = "";
+            ImGui::InputText("Name", nameInput, IM_ARRAYSIZE(nameInput));
+
+            if(ImGui::Button("Create")){
+
+                worldInstances.push_back(WorldInstance(std::string(nameInput)));
+                newGameInstanceWindowOpen = false;
+            }
+            ImGui::SameLine();
+            if(ImGui::Button("Close")){
+
+                newGameInstanceWindowOpen = false;
+            }
             ImGui::End();
         }
         return 0;

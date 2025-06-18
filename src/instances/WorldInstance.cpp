@@ -14,12 +14,20 @@
 class WorldInstance
 {
     public:
+
+    string worldName;
     InstanceManager* instanceManager;
     EditorCamera editorCamera;
 
     WorldInstance()
     {
         instanceManager = new InstanceManager;
+        worldName = "World Instance";
+    }
+    WorldInstance(string name)
+    { 
+        instanceManager = new InstanceManager;
+        worldName = name;
     }
     int process(float dt, bool isEditorCameraActive){
         instanceManager->process(dt,editorCamera);
