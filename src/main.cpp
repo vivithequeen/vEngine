@@ -6,8 +6,8 @@
 #include "raymath.h"
 #include "imgui.h"
 #include "rlImGui.h"
+#include "editor/Editor.cpp"
 
-#include "GameWorld.cpp"
 
 using namespace std;
 
@@ -32,28 +32,14 @@ int main ()
 	// game loop
  	ImGuiIO& io = ImGui::GetIO();
     io.Fonts->AddFontFromFileTTF("resources/DMMono-Regular.ttf", 24.0f); // path and size
-	GameWorld gameWorld;
-	RenderTexture2D renderTexture = LoadRenderTexture(1920, 1080);
+	Editor editor;
+	
 	while (!WindowShouldClose())		// run the loop untill the user presses ESCAPE or presses the Close button on the window
 	{
-
-		// drawing
-		BeginDrawing();
-		ClearBackground(BLACK);
-		//BeginMode3D(instanceManager.player.getCamera());
-
-		BeginTextureMode(renderTexture);
-		ClearBackground(BLACK);
-		BeginMode3D(gameWorld.getCurrentCamera());
-		gameWorld.draw3D();
-		EndMode3D();
-		DrawFPS(0,0);
-		EndTextureMode();
-
-		gameWorld.draw2D(renderTexture);
 		
-		
-		EndDrawing();
+		editor.process();
+
+
 	}
 
 	// cleanup

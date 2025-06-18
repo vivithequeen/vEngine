@@ -69,7 +69,17 @@ public:
                                         
                                 instanceManager->makeCubeMesh({px, py, pz}, {rx, ry, rz}, {dx, dy, dz});
                             }
+                            else if (perLine.find("planemeshinst") != string::npos){
+                                size_t dimStart = perLine.find("Dimentions:(");
+                                size_t dimEnd = perLine.find(")", dimStart);
+                                std::string dimStr = perLine.substr(dimStart + 12, dimEnd - (dimStart + 12));
+                                float dx, dy;
+                                sscanf(dimStr.c_str(), "%f,%f", &dx, &dy);
+                                        
+                                instanceManager->makePlaneMesh({px, py, pz}, {rx, ry, rz}, {dx, dy});
+                            }
                         }
+
                     }
                 }
 

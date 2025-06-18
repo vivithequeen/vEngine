@@ -15,6 +15,8 @@
 #include "EditorCamera.cpp"
 #include "EditorConsole.cpp"
 #include "FileManager.cpp"
+#include "../instances/WorldInstance.cpp"
+
 class Editor
 {
 private:
@@ -35,8 +37,10 @@ private:
     
     vector<string> filePaths;
     vector<string> lines;
+    WorldInstance currentWorldInstance;
+    
 public:
-    EditorCamera editorCamera;
+
     
     Editor()
     {
@@ -52,7 +56,7 @@ public:
         instanceInspectorOpen = false;
         isEditorCameraActive = false;
         assetManagerWindowOpen = true;
-
+        
         console = EditorConsole();
 
 
@@ -60,14 +64,40 @@ public:
 
     }
 
-    int process(float dt)
+    int process()
     {
-        editorCamera.process(dt, isEditorCameraActive);
+        BeginDrawing();
+        draw3D();
+        draw2D();
+        EndDrawing();
         return 0;
     }
-
-    int draw2D(RenderTexture2D renderTexture, InstanceManager *instanceManager)
+    RenderTexture2D renderTexture = LoadRenderTexture(1920, 1080);
+    int draw3D()
     {
+		BeginTextureMode(renderTexture);
+		ClearBackground(BLACK);
+
+		BeginMode3D(currentWorldInstance.editorCamera.camera);
+        DrawGrid(17,1);
+		currentWorldInstance.process(GetFrameTime(),isEditorCameraActive);
+		EndMode3D();
+		DrawFPS(0,0);
+		EndTextureMode();
+        return 0;
+    }
+    int draw2D()
+    {
+        
+		ClearBackground(BLACK);
+		
+
+
+
+		
+		
+		
+        
         filePaths = getFilePaths("../resources");
         rlImGuiBegin();
         // values
@@ -100,14 +130,14 @@ public:
         mainMenuBar();
 
         editorSettingsWindow();
-        gameWindow(renderTexture);
-        instanceManagerWindow(instanceManager);
-        newInstanceWindow(instanceManager);
+        gameWindow();
+        instanceManagerWindow(currentWorldInstance.instanceManager);
+        newInstanceWindow(currentWorldInstance.instanceManager);
         instanceInspectorWindow();
         assetManagerWindow();
         console.drawConsole();
         ImGui::PopFont();
-
+        
         rlImGuiEnd();
 
         return 0;
@@ -220,7 +250,7 @@ public:
         }
         return 0;
     }
-    int gameWindow(RenderTexture2D renderTexture)
+    int gameWindow()
     {
         if (gameWindowOpen)
         {

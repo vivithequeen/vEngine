@@ -22,6 +22,13 @@ class PlaneMeshInstance : public MeshInstance{
         this->type = "PlaneMeshInstance";
         dimentionsEditor[0] = dimentions.x;
         dimentionsEditor[1] = dimentions.y;
+        positionEditor[0] = position.x;
+        positionEditor[1] = position.y;
+        positionEditor[2] = position.z;
+
+        rotationEditor[0] = RAD2DEG * rotation.x; 
+        rotationEditor[1] = RAD2DEG * rotation.y;    
+        rotationEditor[2] = RAD2DEG *  rotation.z;   
         updateMesh();       
     }
     PlaneMeshInstance(Vector3 pos, Vector3 rot, Vector2 di) // plane
@@ -35,6 +42,13 @@ class PlaneMeshInstance : public MeshInstance{
         this->type = "PlaneMeshInstance";
         dimentionsEditor[0] = dimentions.x;
         dimentionsEditor[1] = dimentions.y;
+        positionEditor[0] = position.x;
+        positionEditor[1] = position.y;
+        positionEditor[2] = position.z;
+
+        rotationEditor[0] = RAD2DEG * rotation.x; 
+        rotationEditor[1] = RAD2DEG * rotation.y;    
+        rotationEditor[2] = RAD2DEG *  rotation.z;   
         updateMesh();
 
     }
@@ -72,7 +86,7 @@ class PlaneMeshInstance : public MeshInstance{
     {
         string str;
         
-        str+="pPlaneMeshInstance:Dimentions:(" + to_string(dimentions.x) + "," + to_string(dimentions.y)  + ")";
+        str+="pPlaneMeshInstance:Dimentions:(" + to_string(dimentions.x) + "," + to_string(dimentions.y)  + ")planemeshinst";
         str+=MeshInstance::getSaveString();
         return str;
 
