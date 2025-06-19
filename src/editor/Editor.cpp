@@ -23,13 +23,14 @@ private:
     bool mouse_locked;
 
     bool editorSettingsOpen;
-    bool gameWindowOpen;
+    bool editorGameWindowOpen;
     bool instanceManagerOpen;
     bool newInstanceWindowOpen;
     bool instanceInspectorOpen;
     bool assetManagerWindowOpen;
     bool newWorldInstanceWindowOpen;
     bool fileLoadWindowOpen;
+    bool playerGameWindowOpen;
 
     bool isEditorCameraActive;
 
@@ -51,7 +52,7 @@ public:
         io.ConfigDockingWithShift = true;
         mouse_locked = true;
         editorSettingsOpen = true;
-        gameWindowOpen = true;
+        editorGameWindowOpen = true;
         instanceManagerOpen = true;
         newInstanceWindowOpen = false;
         instanceInspectorOpen = true;
@@ -59,6 +60,7 @@ public:
         assetManagerWindowOpen = true;
         newWorldInstanceWindowOpen = false;
         fileLoadWindowOpen = false;
+        playerGameWindowOpen = true;
         currentWorldInstanceIndex = 0;
 
         console = EditorConsole();
@@ -68,24 +70,46 @@ public:
 
     int process()
     {
+        if(isEditorCameraActive){
+	        HideCursor();
+	        //DisableCursor();
+        }
+        else if(IsCursorHidden() ){
+            ShowCursor();
+            EnableCursor();
+        }
         BeginDrawing();
         draw3D();
         draw2D();
         EndDrawing();
         return 0;
     }
-    RenderTexture2D renderTexture = LoadRenderTexture(1920, 1080);
+    RenderTexture2D editorRenderTexture = LoadRenderTexture(1920, 1080);
+    RenderTexture2D playerRenderTexture = LoadRenderTexture(1920, 1080);
     int draw3D()
     {
-        BeginTextureMode(renderTexture);
+        BeginTextureMode(editorRenderTexture);
         ClearBackground(BLACK);
 
         BeginMode3D(worldInstances.at(currentWorldInstanceIndex).editorCamera.camera);
-        DrawGrid(50, 1);
-        DrawLine3D((Vector3){-25, 0, 0}, (Vector3){25, 0, 0}, RED);
-        DrawLine3D((Vector3){0, -25, 0}, (Vector3){0, 25, 0}, GREEN);
-        DrawLine3D((Vector3){0, 0, -25}, (Vector3){0, 0, 25}, BLUE);
-        worldInstances.at(currentWorldInstanceIndex).process(GetFrameTime(), isEditorCameraActive);
+            DrawGrid(50, 1);
+            DrawLine3D((Vector3){-25, 0, 0}, (Vector3){25, 0, 0}, RED);
+            DrawLine3D((Vector3){0, -25, 0}, (Vector3){0, 25, 0}, GREEN);
+            DrawLine3D((Vector3){0, 0, -25}, (Vector3){0, 0, 25}, BLUE);
+            worldInstances.at(currentWorldInstanceIndex).process(GetFrameTime(), isEditorCameraActive);
+        EndMode3D();
+        DrawFPS(0, 0);
+        EndTextureMode();
+
+        BeginTextureMode(playerRenderTexture);
+        ClearBackground(BLACK);
+
+        BeginMode3D(worldInstances.at(currentWorldInstanceIndex).playerInstance.getCamera());
+            DrawGrid(50, 1);
+            DrawLine3D((Vector3){-25, 0, 0}, (Vector3){25, 0, 0}, RED);
+            DrawLine3D((Vector3){0, -25, 0}, (Vector3){0, 25, 0}, GREEN);
+            DrawLine3D((Vector3){0, 0, -25}, (Vector3){0, 0, 25}, BLUE);
+            worldInstances.at(currentWorldInstanceIndex).process(GetFrameTime(), isEditorCameraActive);
         EndMode3D();
         DrawFPS(0, 0);
         EndTextureMode();
@@ -101,7 +125,7 @@ public:
         // values
         ImGuiIO &io = ImGui::GetIO();
 
-        ImFont *myFont = io.Fonts->Fonts[1];
+        ImFont *myFont = io.Fonts->Fonts[0];
 
         ImGui::PushFont(myFont);
         static bool background = true;
@@ -122,17 +146,19 @@ public:
         // graphics stoof
         bool my_tool_active = true;
         bool *b = &my_tool_active;
-        ImTextureID texture = (ImTextureID)(uintptr_t)renderTexture.texture.id;
+        ImTextureID texture = (ImTextureID)(uintptr_t)editorRenderTexture.texture.id;
 
         mainMenuBar();
 
         editorSettingsWindow();
-        gameWindow();
+        editorGameWindow();
+        playerGameWindow();
         instanceManagerWindow(worldInstances.at(currentWorldInstanceIndex).instanceManager);
         newInstanceWindow(worldInstances.at(currentWorldInstanceIndex).instanceManager);
         instanceInspectorWindow();
         assetManagerWindow();
         newWorldInstanceWindow();
+        playerGameWindow();
         console.drawConsole();
         ImGui::PopFont();
 
@@ -182,7 +208,7 @@ public:
         {
             ImGui::SeparatorText("Editor");
             ImGui::MenuItem("Editor Settings", NULL, &editorSettingsOpen);
-            ImGui::MenuItem("Game Window", NULL, &gameWindowOpen);
+            ImGui::MenuItem("Game Window", NULL, &editorGameWindowOpen);
             ImGui::MenuItem("Instance Manager", NULL, &instanceManagerOpen);
             ImGui::MenuItem("Asset Manager", NULL, &assetManagerWindowOpen);
             ImGui::MenuItem("Instance Inspector", NULL, &instanceInspectorOpen);
@@ -249,23 +275,73 @@ public:
         }
         return 0;
     }
-    int gameWindow()
+    int playerGameWindow()
+    {
+
+        if (playerGameWindowOpen)
+        {
+            // does not scale correctly, it should keep its proportions
+            ImTextureID texture = (ImTextureID)(uintptr_t)playerRenderTexture.texture.id;
+
+            ImGui::Begin("Player Game Window", &playerGameWindowOpen, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoScrollbar);
+
+            if (ImGui::BeginMenuBar())
+            {
+                if (ImGui::BeginMenu("File"))
+                {
+   
+                }
+                ImGui::EndMenuBar();
+            }
+            ImGui::BeginTabBar("worlds");
+            int index = 0;
+            for (WorldInstance w : worldInstances)
+            {
+                ImGui::PushID(index+10);
+                if (ImGui::BeginTabItem(worldInstances.at(index).worldName.c_str()))
+                {
+                    currentWorldInstanceIndex = index;
+                    ImGui::Image(texture, ImVec2(ImGui::GetWindowSize().x, ImGui::GetWindowSize().x * 9.0 / 16), ImVec2(0, 1), ImVec2(1, 0));
+                    ImGui::EndTabItem();
+                }
+                index++;
+                ImGui::PopID();
+            }
+            ImGui::EndTabBar();
+            if (ImGui::IsMouseHoveringRect(ImGui::GetWindowPos(), ImVec2(ImGui::GetWindowSize().x, ImGui::GetWindowSize().x * 9.0 / 16)) && ImGui::IsMouseDown(ImGuiMouseButton_Right))
+            { // freecam mode
+                // HideCursor();
+                // DisableCursor();
+                isEditorCameraActive = true;
+            }
+            else
+            {
+                // ShowCursor();
+                // EnableCursor();
+                isEditorCameraActive = false;
+            }
+
+            ImGui::End();
+        }
+        return 0;
+    }
+    int editorGameWindow()
     {
         if (fileLoadWindowOpen)
         {
             string str = fileLoadWindow("Load World Instance");
-            if (str != "")
+            if (str != "" and getFileExtension(str) == "vWorld")
             {
                 worldInstances.push_back(fileManager.loadWorldInstance(str));
                 fileLoadWindowOpen = false;
             }
         }
-        if (gameWindowOpen)
+        if (editorGameWindowOpen)
         {
             // does not scale correctly, it should keep its proportions
-            ImTextureID texture = (ImTextureID)(uintptr_t)renderTexture.texture.id;
+            ImTextureID texture = (ImTextureID)(uintptr_t)editorRenderTexture.texture.id;
 
-            ImGui::Begin("Game Window", &gameWindowOpen, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoScrollbar);
+            ImGui::Begin("Editor Game Window", &editorGameWindowOpen, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoScrollbar);
 
             if (ImGui::BeginMenuBar())
             {

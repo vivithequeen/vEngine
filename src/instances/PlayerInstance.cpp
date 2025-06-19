@@ -77,19 +77,8 @@ public:
         return (BoundingBox){newMin, newMax};
     }
 
-    bool collitionCheck(vector<MeshInstance> meshs)
-    {
-        BoundingBox transformedBox = getTransformedBox();
-        for (MeshInstance m : meshs)
-        {
-            if (CheckCollisionBoxes(transformedBox, m.getBoundingBox()))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-    void process(float dt, vector<MeshInstance> meshs)
+
+    void process(float dt,bool move)
     {
 
         velocity.x = (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP)) * WALKSPEED * dt -
@@ -106,9 +95,9 @@ public:
 
         BoundingBox transformedBox = getTransformedBox();
         rotation += rotationVelocity;
-        DrawBoundingBox(transformedBox,(collitionCheck(meshs) ? RED : GREEN));//
+        
         //if (!collitionCheck(meshs))
-        {
+        if(move){
             UpdateCameraPro(&camera,
                             velocity,
                             rotationVelocity,

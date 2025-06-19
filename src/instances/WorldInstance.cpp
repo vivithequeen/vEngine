@@ -18,10 +18,12 @@ class WorldInstance
     string worldName;
     InstanceManager* instanceManager;
     EditorCamera editorCamera;
+    PlayerInstance playerInstance;
 
     WorldInstance()
     {
         instanceManager = new InstanceManager;
+        
         worldName = "World Instance";
     }
     WorldInstance(string name)
@@ -32,6 +34,8 @@ class WorldInstance
     int process(float dt, bool isEditorCameraActive){
         instanceManager->process(dt,editorCamera);
         editorCamera.process(dt, isEditorCameraActive);
+
+        playerInstance.process(dt,isEditorCameraActive);
         return 0;
     }
 };

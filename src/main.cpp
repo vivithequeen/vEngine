@@ -13,7 +13,8 @@ using namespace std;
 
 int main ()
 {
-	rlImGuiSetup(true);
+	
+
 
 	// Tell the window to use vsync and work on high DPI displays
 	SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
