@@ -25,7 +25,7 @@ class EditorCamera{
     int process(float dt, bool move){
         if(move)
         {
-            UpdateCamera(&camera, CAMERA_FREE);
+            UpdateCamera(&camera, CAMERA_THIRD_PERSON);
         }
         return 0;
     }

@@ -1,2 +1,2 @@
-cCubeMeshInstance:Dimentions:(2.000000,3.000000,4.000000)cubemeshinstMeshInstance:MaterialInstance:FilePathColliderInstance:DebugVisible1DoesColliton:1meshinstTransformInstance:Position:(1.000000,-1.000000,2.000000)Rotation:(1.810413,2.481596,2.270394)trainstInstance:Name:CubeMeshInstancebsinst
-pPlaneMeshInstance:Dimentions:(12.000000,1.000000)planemeshinstMeshInstance:MaterialInstance:FilePathColliderInstance:DebugVisible1DoesColliton:1meshinstTransformInstance:Position:(0.000000,0.000000,0.000000)Rotation:(0.851965,0.791995,0.000000)trainstInstance:Name:PlaneMeshInstancebsinst
+namefa
+cCubeMeshInstance:Dimentions:(0.100000,1.000000,1.000000)cubemeshinstMeshInstance:MaterialInstance:FilePathColliderInstance:DebugVisible1DoesColliton:1meshinstTransformInstance:Position:(0.200000,2.000000,1.100000)Rotation:(3.907827,1.589716,2.346735)trainstInstance:Name:CubeMeshInstancebsinst

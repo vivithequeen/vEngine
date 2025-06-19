@@ -28,47 +28,42 @@ private:
     bool newInstanceWindowOpen;
     bool instanceInspectorOpen;
     bool assetManagerWindowOpen;
-    bool newGameInstanceWindowOpen;
+    bool newWorldInstanceWindowOpen;
+    bool fileLoadWindowOpen;
 
     bool isEditorCameraActive;
 
     EditorConsole console;
     Instance *currentInstanceInspectorInstance;
     FileManager fileManager;
-    
+
     vector<string> filePaths;
     vector<string> lines;
     vector<WorldInstance> worldInstances;
     int currentWorldInstanceIndex;
-    
-public:
 
-    
+public:
     Editor()
     {
         ImGuiIO &io = ImGui::GetIO();
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-        //ImGui::DockSpaceOverViewport(0,  NULL, ImGuiDockNodeFlags_PassthruCentralNode);
+        // ImGui::DockSpaceOverViewport(0,  NULL, ImGuiDockNodeFlags_PassthruCentralNode);
         io.ConfigDockingWithShift = true;
         mouse_locked = true;
         editorSettingsOpen = true;
         gameWindowOpen = true;
         instanceManagerOpen = true;
         newInstanceWindowOpen = false;
-        instanceInspectorOpen = false;
+        instanceInspectorOpen = true;
         isEditorCameraActive = false;
         assetManagerWindowOpen = true;
-        newGameInstanceWindowOpen = false;
+        newWorldInstanceWindowOpen = false;
+        fileLoadWindowOpen = false;
         currentWorldInstanceIndex = 0;
 
-        name = "";
         console = EditorConsole();
 
         worldInstances.push_back(WorldInstance());
-        worldInstances.push_back(WorldInstance());
-
-        
-
     }
 
     int process()
@@ -82,54 +77,52 @@ public:
     RenderTexture2D renderTexture = LoadRenderTexture(1920, 1080);
     int draw3D()
     {
-		BeginTextureMode(renderTexture);
-		ClearBackground(BLACK);
+        BeginTextureMode(renderTexture);
+        ClearBackground(BLACK);
 
-		BeginMode3D(worldInstances.at(currentWorldInstanceIndex).editorCamera.camera);
-        DrawGrid(50,1);
-        DrawLine3D((Vector3){-25,0,0},(Vector3){25,0,0},RED);
-        DrawLine3D((Vector3){0,-25,0},(Vector3){0,25,0},GREEN);
-        DrawLine3D((Vector3){0,0,-25},(Vector3){0,0,25},BLUE);
-		worldInstances.at(currentWorldInstanceIndex).process(GetFrameTime(),isEditorCameraActive);
-		EndMode3D();
-		DrawFPS(0,0);
-		EndTextureMode();
+        BeginMode3D(worldInstances.at(currentWorldInstanceIndex).editorCamera.camera);
+        DrawGrid(50, 1);
+        DrawLine3D((Vector3){-25, 0, 0}, (Vector3){25, 0, 0}, RED);
+        DrawLine3D((Vector3){0, -25, 0}, (Vector3){0, 25, 0}, GREEN);
+        DrawLine3D((Vector3){0, 0, -25}, (Vector3){0, 0, 25}, BLUE);
+        worldInstances.at(currentWorldInstanceIndex).process(GetFrameTime(), isEditorCameraActive);
+        EndMode3D();
+        DrawFPS(0, 0);
+        EndTextureMode();
         return 0;
     }
     int draw2D()
     {
-        
-		ClearBackground(BLACK);
-		
-        
+
+        ClearBackground(BLACK);
+
         filePaths = getFilePaths("../resources");
         rlImGuiBegin();
         // values
         ImGuiIO &io = ImGui::GetIO();
 
         ImFont *myFont = io.Fonts->Fonts[1];
-        
+
         ImGui::PushFont(myFont);
         static bool background = true;
-        ImGui::SetNextWindowPos(ImVec2(0, 0));                                                  
+        ImGui::SetNextWindowPos(ImVec2(0, 0));
         ImGui::SetNextWindowSize(ImVec2(float(GetScreenWidth()), float(GetScreenHeight())));
-        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoBringToFrontOnFocus |                 
-            ImGuiWindowFlags_NoNavFocus |                                                      
-            ImGuiWindowFlags_NoDocking |
-            ImGuiWindowFlags_NoTitleBar |
-            ImGuiWindowFlags_NoResize |
-            ImGuiWindowFlags_NoMove |
-            ImGuiWindowFlags_NoCollapse |
-            ImGuiWindowFlags_MenuBar |
-            ImGuiWindowFlags_NoBackground;
-        ImGui::Begin("background",&background,windowFlags);
-        ImGui::DockSpace(ImGui::GetID("Dockspace"), ImVec2(0.0f, 0.0f),  ImGuiDockNodeFlags_PassthruCentralNode);
+        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoBringToFrontOnFocus |
+                                       ImGuiWindowFlags_NoNavFocus |
+                                       ImGuiWindowFlags_NoDocking |
+                                       ImGuiWindowFlags_NoTitleBar |
+                                       ImGuiWindowFlags_NoResize |
+                                       ImGuiWindowFlags_NoMove |
+                                       ImGuiWindowFlags_NoCollapse |
+                                       ImGuiWindowFlags_MenuBar |
+                                       ImGuiWindowFlags_NoBackground;
+        ImGui::Begin("background", &background, windowFlags);
+        ImGui::DockSpace(ImGui::GetID("Dockspace"), ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
         ImGui::End();
         // graphics stoof
         bool my_tool_active = true;
         bool *b = &my_tool_active;
         ImTextureID texture = (ImTextureID)(uintptr_t)renderTexture.texture.id;
-
 
         mainMenuBar();
 
@@ -139,10 +132,10 @@ public:
         newInstanceWindow(worldInstances.at(currentWorldInstanceIndex).instanceManager);
         instanceInspectorWindow();
         assetManagerWindow();
-        newGameInstanceWindow();
+        newWorldInstanceWindow();
         console.drawConsole();
         ImGui::PopFont();
-        
+
         rlImGuiEnd();
 
         return 0;
@@ -192,6 +185,7 @@ public:
             ImGui::MenuItem("Game Window", NULL, &gameWindowOpen);
             ImGui::MenuItem("Instance Manager", NULL, &instanceManagerOpen);
             ImGui::MenuItem("Asset Manager", NULL, &assetManagerWindowOpen);
+            ImGui::MenuItem("Instance Inspector", NULL, &instanceInspectorOpen);
             ImGui::SeparatorText("Debug");
             ImGui::MenuItem("Console", NULL, &console.editorConsoleOpen);
             ImGui::EndMenu();
@@ -211,7 +205,7 @@ public:
         if (ImGui::BeginMenu("About"))
         {
 
-            ImGui::TextLinkOpenURL("Code","https://github.com/vivithequeen/vEngine");
+            ImGui::TextLinkOpenURL("Code", "https://github.com/vivithequeen/vEngine");
             ImGui::EndMenu();
         }
 
@@ -232,22 +226,22 @@ public:
                 {
                 };
 
-                const char* themes[3] = {"Dark", "Light", "Purple"};
+                const char *themes[3] = {"Dark", "Light", "Purple"};
                 static int currentItem = 0;
-  
 
-                if(ImGui::Combo("Themes",&currentItem,themes,IM_ARRAYSIZE(themes))){ 
-                    switch (currentItem){
-                        case 0:
-                            ImGui::StyleColorsDark();
-                            break;
-                        case 1:
-                            ImGui::StyleColorsLight();
-                            break;
-                        case 2:
-                            ImGui::StyleColorsClassic();
-                            break;
-
+                if (ImGui::Combo("Themes", &currentItem, themes, IM_ARRAYSIZE(themes)))
+                {
+                    switch (currentItem)
+                    {
+                    case 0:
+                        ImGui::StyleColorsDark();
+                        break;
+                    case 1:
+                        ImGui::StyleColorsLight();
+                        break;
+                    case 2:
+                        ImGui::StyleColorsClassic();
+                        break;
                     }
                 }
                 ImGui::End();
@@ -257,6 +251,15 @@ public:
     }
     int gameWindow()
     {
+        if (fileLoadWindowOpen)
+        {
+            string str = fileLoadWindow("Load World Instance");
+            if (str != "")
+            {
+                worldInstances.push_back(fileManager.loadWorldInstance(str));
+                fileLoadWindowOpen = false;
+            }
+        }
         if (gameWindowOpen)
         {
             // does not scale correctly, it should keep its proportions
@@ -268,17 +271,28 @@ public:
             {
                 if (ImGui::BeginMenu("File"))
                 {
-                    ImGui::MenuItem("New World Instance", NULL, &newGameInstanceWindowOpen);
+                    if (ImGui::MenuItem("New World Instance", NULL, &newWorldInstanceWindowOpen))
+                    {
+                    }
+                    if (ImGui::MenuItem("Save World Instance"))
+                    {
+                        fileManager.saveWorldInstance(&worldInstances.at(currentWorldInstanceIndex));
+                    }
+                    if (ImGui::MenuItem("Load World Instance"))
+                    {
+                        fileLoadWindowOpen = true;
+                    }
                     ImGui::EndMenu();
                 }
                 ImGui::EndMenuBar();
             }
             ImGui::BeginTabBar("worlds");
             int index = 0;
-            for(WorldInstance w : worldInstances)
+            for (WorldInstance w : worldInstances)
             {
                 ImGui::PushID(index);
-                if(ImGui::BeginTabItem(worldInstances.at(index).worldName.c_str())){
+                if (ImGui::BeginTabItem(worldInstances.at(index).worldName.c_str()))
+                {
                     currentWorldInstanceIndex = index;
                     ImGui::Image(texture, ImVec2(ImGui::GetWindowSize().x, ImGui::GetWindowSize().x * 9.0 / 16), ImVec2(0, 1), ImVec2(1, 0));
                     ImGui::EndTabItem();
@@ -287,7 +301,7 @@ public:
                 ImGui::PopID();
             }
             ImGui::EndTabBar();
-            if (ImGui::IsMouseHoveringRect(ImGui::GetWindowPos(), ImVec2(ImGui::GetWindowSize().x,ImGui::GetWindowSize().x * 9.0 / 16)) && ImGui::IsMouseDown(ImGuiMouseButton_Right))
+            if (ImGui::IsMouseHoveringRect(ImGui::GetWindowPos(), ImVec2(ImGui::GetWindowSize().x, ImGui::GetWindowSize().x * 9.0 / 16)) && ImGui::IsMouseDown(ImGuiMouseButton_Right))
             { // freecam mode
                 // HideCursor();
                 // DisableCursor();
@@ -300,34 +314,115 @@ public:
                 isEditorCameraActive = false;
             }
 
-            
-
             ImGui::End();
         }
         return 0;
     }
-    string name;
-    int newGameInstanceWindow()
+
+    int newWorldInstanceWindow()
     {
-        if(newGameInstanceWindowOpen){
-            ImGui::Begin("New Game Instance");
+        string newWorldInstanceName = "";
+        if (newWorldInstanceWindowOpen)
+        {
+            ImGui::Begin("New World Instance", &newWorldInstanceWindowOpen);
             static char nameInput[128] = "";
             ImGui::InputText("Name", nameInput, IM_ARRAYSIZE(nameInput));
 
-            if(ImGui::Button("Create")){
+            if (ImGui::Button("Create"))
+            {
 
                 worldInstances.push_back(WorldInstance(std::string(nameInput)));
-                newGameInstanceWindowOpen = false;
-            }
+                newWorldInstanceWindowOpen = false;
+                newWorldInstanceName = "";
+                strcpy(nameInput, "");
+            } 
             ImGui::SameLine();
-            if(ImGui::Button("Close")){
+            if (ImGui::Button("Close"))
+            {
 
-                newGameInstanceWindowOpen = false;
+                newWorldInstanceWindowOpen = false;
             }
             ImGui::End();
         }
         return 0;
     }
+    string fileLoadWindow(string windowName)
+    {
+        static string selectedFilePath = "";
+        if (selectedFilePath=="")
+        {
+
+            ImGui::Begin(windowName.c_str(), &fileLoadWindowOpen, ImGuiWindowFlags_MenuBar);
+            
+            if (ImGui::BeginTable("table1", 1))
+            {
+
+                ImGui::TableSetupColumn("File Location");
+
+                ImGui::TableHeadersRow();
+                static int selectedFileLoad = -1;
+                for (int row = 0; row < filePaths.size(); row++)
+                {
+                    ImGui::TableNextRow();
+                    for (int column = 0; column < 1; column++)
+                    {
+                        ImGui::TableSetColumnIndex(column);
+                        if (filesystem::status(filePaths.at(row)).type() == filesystem::file_type::directory)
+                        {
+                            if (ImGui::TreeNode(filePaths.at(row).c_str()))
+                            {
+                                ImGui::TreePop();
+                            }
+                        }
+                        else
+                        {
+                            ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+                            if (ImGui::MenuItem(filePaths.at(row).substr(13).c_str()))
+                            {
+                               
+                                selectedFilePath = filePaths.at(row).substr(13);
+                            }
+                            // if()
+                            if (ImGui::BeginItemTooltip())
+                            {
+                                selectedFileLoad = column;
+                                if (getFileExtension(filePaths.at(row).c_str()) == "png")
+                                {
+                                    if (currentToolTipTexturePath == filePaths.at(row))
+                                    {
+                                    }
+                                    else
+                                    {
+                                        toolTipTexture = LoadTexture(filePaths.at(row).c_str());
+                                        currentToolTipTexturePath = filePaths.at(row);
+                                    }
+                                    rlImGuiImageSize(&toolTipTexture, 50, 50);
+                                }
+                                ImGui::Text("%s", filePaths.at(row).c_str());
+                                ImGui::Text("%dbytes", (int)(filesystem::file_size(filePaths.at(row).c_str())));
+                                ImGui::EndTooltip();
+                            }
+                        }
+                    }
+                }
+
+                ImGui::EndTable();
+            }
+            ImGui::End();
+        }
+        
+        if (selectedFilePath != "")
+        {
+
+            string tempFilePath = selectedFilePath;
+            selectedFilePath = "";
+            //selectedFilePath.clear();6
+            return tempFilePath;
+        }
+        
+        return "";
+    }
+
     int instanceManagerWindow(InstanceManager *instanceManager)
     {
         if (instanceManagerOpen)
@@ -345,11 +440,11 @@ public:
                 }
                 ImGui::EndMenuBar();
             }
-            int index=0;
+            int index = 0;
             for (auto *m : instanceManager->instances)
-            { 
+            {
                 ImGui::PushID(index);
-                
+
                 if (ImGui::MenuItem(m->getNameAsChar()))
                 {
                     currentInstanceInspectorInstance = nullptr;
@@ -359,10 +454,6 @@ public:
                 ImGui::PopID();
                 index++;
             }
-                    
-                
-
-            
 
             ImGui::End();
         }
@@ -373,14 +464,6 @@ public:
         if (newInstanceWindowOpen)
         {
             ImGui::Begin("New Instance Creator", &newInstanceWindowOpen, ImGuiWindowFlags_MenuBar);
-            if(ImGui::Button("SAVE!!")){
-                fileManager.saveWorldInstance(instanceManager);
-            }
-
-
-            if(ImGui::Button("LOAD!!!!")){
-                fileManager.loadWorldInstance("myWorld.vWorld",instanceManager);
-            }
 
             ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
             if (ImGui::TreeNode("Instance"))
@@ -393,14 +476,11 @@ public:
                         {
                             instanceManager->instances.push_back(new PlaneMeshInstance());
                             newInstanceWindowOpen = false;
- 
-                            
                         }
                         if (ImGui::Button("CubeMeshInstance"))
                         {
                             instanceManager->instances.push_back(new CubeMeshInstance());
                             newInstanceWindowOpen = false;
-
                         }
                         ImGui::TreePop();
                     }
@@ -408,20 +488,14 @@ public:
                     {
                         instanceManager->instances.push_back(new ModelInstance());
                         newInstanceWindowOpen = false;
-
-
                     }
                     if (ImGui::TreeNode("ColliderInstance"))
                     {
                         if (ImGui::Button("BoxColliderInstance"))
                         {
-
-                            
                         }
                         if (ImGui::Button("SphereColliderInstance"))
                         {
-
-                            
                         }
                         ImGui::TreePop();
                     }
@@ -437,10 +511,17 @@ public:
 
     int instanceInspectorWindow()
     {
-        if (instanceInspectorOpen && currentInstanceInspectorInstance)
+        if (instanceInspectorOpen)
         {
-            ImGui::Begin("Instance Inspector", &instanceInspectorOpen, ImGuiWindowFlags_MenuBar); // add name functionality
-            currentInstanceInspectorInstance->getEditorOptions();                                                              // CHANGE SEPERATE INSTANCE MANAGERS TO JUST BE A SINGLE INSTANGE MANAGER
+            ImGui::Begin("Instance Inspector", &instanceInspectorOpen, ImGuiWindowFlags_MenuBar);
+            if (currentInstanceInspectorInstance)
+            {
+                currentInstanceInspectorInstance->getEditorOptions();
+            }
+            else
+            {
+                ImGui::TextUnformatted("No Instance Selected");
+            }
             ImGui::End();
         }
         return 0;
@@ -468,13 +549,14 @@ public:
                         ImGui::TableSetColumnIndex(column);
                         if (filesystem::status(filePaths.at(row)).type() == filesystem::file_type::directory)
                         {
-                            if(ImGui::TreeNode(filePaths.at(row).c_str())){
+                            if (ImGui::TreeNode(filePaths.at(row).c_str()))
+                            {
                                 ImGui::TreePop();
                             }
                         }
                         else
                         {
-                            ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen; 
+                            ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
                             ImGui::TreeNodeEx(filePaths.at(row).substr(13).c_str(), node_flags);
                             // if()
                             if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
@@ -493,13 +575,11 @@ public:
                                         currentToolTipTexturePath = filePaths.at(row);
                                     }
                                     rlImGuiImageSize(&toolTipTexture, 50, 50);
-                                    
                                 }
                                 ImGui::Text("%s", filePaths.at(row).c_str());
                                 ImGui::Text("%dbytes", (int)(filesystem::file_size(filePaths.at(row).c_str())));
                                 ImGui::EndDragDropSource();
                             }
-                            
 
                             if (ImGui::BeginItemTooltip())
                             {
@@ -557,5 +637,4 @@ public:
             return filepath.substr(dotPos + 1);
         return "";
     }
-
 };

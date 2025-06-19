@@ -7,7 +7,8 @@
 
 #include "MeshInstance.cpp"
 using namespace std;
-
+#ifndef PLAYER_INSTANCE
+#define PLAYER_INSTANCE
 class PlayerInstance
 {
 
@@ -123,3 +124,4 @@ public:
         }*/
     }
 };
+#endif

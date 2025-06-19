@@ -7,7 +7,7 @@
 #include <string>
 #include <cstdio>
 
-#include "../instanceManagers/InstanceManager.cpp"
+#include "../instances/WorldInstance.cpp"
 
 using namespace std;
 class FileManager
@@ -38,11 +38,15 @@ public:
         return lines;
     }
 
-    int loadWorldInstance(string filepath, InstanceManager *instanceManager) // temp uses instanceManager will make new WorldInstance
+    WorldInstance loadWorldInstance(string filepath) // temp uses instanceManager will make new WorldInstance
     {
+        WorldInstance worldInstance = WorldInstance();
         vector<string> lines = getElementsOfFile(filepath);
         for (string perLine : lines)
         {
+            if(perLine.substr(0,4) == "name"){
+                worldInstance.worldName = perLine.substr(4,perLine.length()-1);
+            }
             if (perLine.find("bsinst") != string::npos)
             {
                 if (perLine.find("trainst") != string::npos)
@@ -67,7 +71,7 @@ public:
                                 float dx, dy, dz;
                                 sscanf(dimStr.c_str(), "%f,%f,%f", &dx, &dy, &dz);
                                         
-                                instanceManager->makeCubeMesh({px, py, pz}, {rx, ry, rz}, {dx, dy, dz});
+                                worldInstance.instanceManager->makeCubeMesh({px, py, pz}, {rx, ry, rz}, {dx, dy, dz});
                             }
                             else if (perLine.find("planemeshinst") != string::npos){
                                 size_t dimStart = perLine.find("Dimentions:(");
@@ -76,7 +80,7 @@ public:
                                 float dx, dy;
                                 sscanf(dimStr.c_str(), "%f,%f", &dx, &dy);
                                         
-                                instanceManager->makePlaneMesh({px, py, pz}, {rx, ry, rz}, {dx, dy});
+                                worldInstance.instanceManager->makePlaneMesh({px, py, pz}, {rx, ry, rz}, {dx, dy});
                             }
                         }
 
@@ -85,15 +89,15 @@ public:
 
             }
         }
-        return 0;
+        return worldInstance;
     }
-    int saveWorldInstance(InstanceManager *instanceManager)
+    int saveWorldInstance(WorldInstance *worldInstance)
     {
         std::ofstream worldSave("myWorld.vWorld");
         if (worldSave.is_open())
         {
-
-            for (auto &ins : instanceManager->instances)
+            worldSave<<"name"<<worldInstance->worldName<<endl;
+            for (auto &ins : worldInstance->instanceManager->instances)
             {
 
                 worldSave << ins->getSaveString() << endl;
