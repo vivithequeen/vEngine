@@ -18,11 +18,11 @@ vEngine is a 3D game engine made using RayLib and c++ and gui with ImGui.
 ## Athena Stuff that i require to have in my readme
 ### WHAT my project is??
 vEngine is a very cool game engine with RayLib and c++
-## WHY i made this??
+#### WHY i made this??
 mostly to see what i could do! it was a lot of fun making all the mechanics super modular and easy to use, and using imgui was fun.
-## How??
+#### How??
 a lot of looking at documentation and being sad because c/c++ makes me sad 
-## Strugges??
+#### Strugges??
 getting imgui to work initally, but after that it was not that mad. I struggered with understanding polymorphism and pointers
 ## Things I used
 
