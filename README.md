@@ -15,7 +15,7 @@ vEngine is a 3D game engine made using RayLib and c++ and gui with ImGui.
 - Collition
 - Support for Windows and Mac 
 
-## Athena Stuff that i require to have in my readme
+
 ### WHAT my project is??
 vEngine is a very cool game engine with RayLib and c++
 #### WHY i made this??
